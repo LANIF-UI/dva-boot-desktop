@@ -11,7 +11,7 @@
   "scripts": {
     "start:app": "cross-env NODE_ENV=development electron .",
     "start:web": "cross-env BROWSER=none react-app-rewired start",
-    "start": "concurrently -k -p [{name}] \"npm run start:web\" \"wait-on http://localhost:3000/ && npm run start:app\"",
+    "start": "concurrently -k -n \"🙉 web,🙈 app\" -c \"yellow,magenta\" \"npm run start:web\" \"wait-on http://localhost:3000/ && npm run start:app\"",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
