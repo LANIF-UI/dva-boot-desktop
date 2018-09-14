@@ -28,3 +28,8 @@ app.router(({ history, app }) => (
 
 // -> Start
 app.start('#root');
+
+// -> Developer mock data
+if (process.env.NODE_ENV === 'development') {
+  require('./__mocks__');
+}

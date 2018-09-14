@@ -3,18 +3,17 @@ import { connect } from 'dva';
 import logo from 'assets/images/logo.png';
 import './style.less';
 import BaseComponent from 'components/BaseComponent';
-import { Notification } from 'components';
 import $$ from 'cmn-utils';
-const notice = Notification.notice;
+import { Button } from 'antd';
 
 @connect()
 export default class Home extends BaseComponent {
-  notice = (e) => {
-    this.close = notice(e.target.innerHTML, e.target.innerHTML);
+  noticeIt = (e) => {
+    this.close = this.notice[e.target.innerText](e.target.innerText);
   }
 
   closeNotice = () => {
-    this.close && this.close();
+    this.notice.close();
   }
 
   render() {
@@ -25,12 +24,12 @@ export default class Home extends BaseComponent {
         <img src={logo} alt="" />
         <div>Welcome Home {user.name}</div>
         <hr />
-        <button onClick={this.notice}>success</button>
-        <button onClick={this.notice}>error</button>
-        <button onClick={this.notice}>warn</button>
-        <button onClick={this.notice}>default</button>
-        <button onClick={this.notice}>dark</button> &nbsp;
-        <button onClick={this.closeNotice}>close</button>
+        <div>
+          <Button type="primary" onClick={this.noticeIt}>success</Button>
+          <Button type="warning" onClick={this.noticeIt}>error</Button>
+          <Button onClick={this.noticeIt}>warn</Button>
+          <Button onClick={this.closeNotice}>close</Button>
+        </div>
       </div>
     )
   }

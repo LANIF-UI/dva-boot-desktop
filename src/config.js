@@ -1,15 +1,22 @@
 import React from 'react';
-import { PageLoading, Notification } from '@/components';
-const notice = Notification.notice;
+import PageLoading from 'components/Loading/PageLoading';
+import { antdNotice } from 'components/Notification';
+
+// 系统通知, 定义使用什么风格的通知，normal或antdNotice
+const notice = antdNotice;
 
 /**
  * 应用配置 如请求格式，反回格式，异常处理方式，分页格式等
  */
 export default {
+  /**
+   * 系统通知
+   */
+  notice,
+
   // 异步请求配置
   request: {
-    prefix: '',
-
+    prefix: '/api',
     /**
      * 因为modelEnhance需要知道服务器反回的数据，
      * 什么样的是成功，什么样的是失败，如
@@ -17,27 +24,20 @@ export default {
      * {status: false, message: ...} // 代表失败
      * 下面写法代表只要有反回就认为是成功，
      * 实际中应该通过服务端反回的response中的
-     * 成功失败标识来进行区分, 使用throw new Error("错误信息");
-     * 来抛出错误,例：
-     * afterResponse: (response) => {
-        const {status, data, message} = response; // 服务端通用反回格式
-        if (status) {
-          return data; // 直接反回实际需要的数据
-        } else {
-          throw new Error(message); 
-        }
-      }
+     * 成功失败标识来进行区分
      */
     afterResponse: (response) => {
-      return response;
+      const {status, message} = response;
+      if (status) {
+        return response;
+      } else {
+        throw new Error(message);
+      }
     },
-    /**
-     * 处理请求时发生的错误
-     */
     errorHandle: (err) => {
-      console.error("错误信息:", err);
+      // 请求错误全局拦截
       if (err.name === 'RequestError') {
-        notice(err.text || err.message, 'error');
+        notice.error(err.text || err.message);
       }
     }
   },
@@ -48,11 +48,12 @@ export default {
       const errName = err.name;
       // RequestError为拦截请求异常
       if (errName === 'RequestError') {
+        notice.error(err.message);
         console.error(err); 
       } else {
         console.error(err);
       }
-      notice(err.message, 'error');
+      // notice.error(err.message);
     },
   },
 
@@ -62,20 +63,22 @@ export default {
     requestFormat: (pageInfo) => {
       const { pageNum, pageSize, filters, sorts } = pageInfo;
       return {
-        pageNum, pageSize, filters, sorts
+        currentPage: pageNum,
+        showCount: pageSize,
+        sortMap: sorts,
+        paramMap: filters,
       }
     },
 
     // 格式化从后端反回的数据
     responseFormat: (resp) => {
-      const { status, data, message } = resp;
-      if (status) {
-        const { pageNum, size, total, totalPages, list } = data;
-        return {
-          pageNum, size, total, totalPages, list
-        }
-      } else {
-        throw new Error(message);
+      const { currentPage, showCount, totalResult, dataList, totalPage } = resp.data;
+      return {
+        pageNum: currentPage || 1,
+        pageSize: showCount || 10,
+        total: totalResult, 
+        totalPages: totalPage,
+        list: dataList
       }
     }
   },
@@ -112,14 +115,4 @@ export default {
       message: message,
     }),
   },
-  
-  /**
-   * 系统通知, 见modelEnhance.js,为了解耦
-   */
-  notice: {
-    success: (message) => notice(message, 'success'),
-    error: (message) => notice(message, 'error'),
-    warning: (message) => notice(message, 'warn'),
-    info: (message) => notice(message),
-  }
 }

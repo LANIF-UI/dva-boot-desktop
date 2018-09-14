@@ -6,7 +6,17 @@ const REQUEST = '@request';
 const REQUEST_SUCCESS = '@request_success';
 const REQUEST_ERROR = '@request_error';
  
-async function asyncRequest(payload) {
+/**
+ * 封装service中的异步方法，如在model中使用
+   const url = '/getPageList';
+   const pageInfo = yield call(asyncRequest, {...payload, url});
+   yield put({
+     type: 'getPageListSuccess',
+     payload: pageInfo
+   });
+ * @param {*} payload 
+ */
+export async function asyncRequest(payload) {
   if (!payload || !payload.url) throw(new Error('payload require contains url opt'));
   /**
    * other中可以配置 method headers data 等参数
@@ -33,7 +43,8 @@ async function asyncRequest(payload) {
     return _promise.then(resp => {
       if ($$.isFunction(config.pageHelper.responseFormat)) {
         const newPageInfo = config.pageHelper.responseFormat(resp);
-        return Object.assign(pageInfo, newPageInfo);
+        // 生成新实例，防止新老指向同一个实例问题
+        return Object.assign(new PageInfo(), pageInfo, newPageInfo);
       }
     })
   } else {
@@ -109,10 +120,10 @@ export default (model) => {
             // 准备返回值
             resultState.success[valueField || '_@fake_'] = response;
           } catch(e) {
-            // 如果需要通知功能
-            if (notice) {
-              config.notice.error(notice === true ? (e.text || e.message) : notice[1], 'error');
-            }
+            // 如果需要通知功能, 转移到config中配置
+            // if (notice) {
+            //   config.notice.error(notice === true ? (e.text || e.message) : notice[1], 'error');
+            // }
             
             resultState.error['error'] = e;
 
