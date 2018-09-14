@@ -23,7 +23,7 @@ function createWindow() {
 
   // 加载应用
   const staticIndexPath = path.join(__dirname, './index.html');
-  const main = IS_DEV ? `http://localhost:3000` : url.format({
+  const main = IS_DEV ? `http://localhost:3210` : url.format({
     pathname: staticIndexPath,
     protocol: 'file:',
     slashes: true
