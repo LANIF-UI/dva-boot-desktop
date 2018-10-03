@@ -3,7 +3,7 @@ import dva from 'dva';
 import { Router } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import createLoading from 'dva-loading';
-import createHistory from 'history/createBrowserHistory';
+import createHistory from 'history/createHashHistory';
 import request from 'cmn-utils/lib/request';
 import createRoutes from '@/routes';
 import 'assets/styles/index.less';
@@ -16,6 +16,8 @@ const app = dva({ history: createHistory() });
 app.use(createLoading());
 app.use({onError: config.exception.global});
 request.config(config.request);
+// -> 使用mock数据
+require('./__mocks__');
 dynamic.setDefaultLoadingComponent(() => config.router.loading);
 
 // -> 注册全局模型
@@ -28,8 +30,3 @@ app.router(({ history, app }) => (
 
 // -> Start
 app.start('#root');
-
-// -> Developer mock data
-if (process.env.NODE_ENV === 'development') {
-  require('./__mocks__');
-}
