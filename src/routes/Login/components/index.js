@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import { Button } from 'antd';
+import logo from 'assets/images/logo.png';
 import './style.less';
 
 @connect(({ login, loading }) => ({
@@ -7,33 +9,21 @@ import './style.less';
   loading: loading.models.login,
 }))
 export default class Login extends Component {
-  onLogin = () => {
-    this.props.dispatch({
-      type: 'login/login',
-      payload: {
-        name: document.querySelector("#name").value,
-        password: document.querySelector("#password").value,
-      }
-    })
-  }
 
   render() {
     const { loading, login } = this.props;
     const { loggedIn, message } = login;
     return (
       <div className="login-page">
-        {loading ? <strong>登录中...</strong> : null}
-        {loggedIn || loading ? null : <strong>{message}</strong>}
-        <div>
-          <label>用户名:</label>
-          <input id="name" />
+        <div className="logo">
+          <img src={logo} alt="" />
         </div>
-        <div>
-          <label>密码:</label>
-          <input type="password" id="password" />
+        <div className="version">
+          <span>v1.0.0</span>
         </div>
-        <div>
-          <button onClick={this.onLogin}>登录</button>
+        <div className="actions">
+          <Button type="primary" block>创建</Button>
+          <Button block>导入</Button>
         </div>
       </div>
     )

@@ -11,11 +11,6 @@ export default class UserLayout extends React.PureComponent {
 
     return (
       <div className="user-layout">
-        <nav>
-          <NavLink to="/user/login" activeClassName="active">登录</NavLink>
-          /
-          <NavLink to="/user/register" activeClassName="active">注册</NavLink>
-        </nav>
         <Switch>
           {childRoutes}
         </Switch>

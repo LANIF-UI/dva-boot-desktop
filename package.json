@@ -20,9 +20,9 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "antd": "^3.8.3",
+    "antd": "^3.10.0",
     "classnames": "^2.2.5",
-    "cmn-utils": "^1.0.6",
+    "cmn-utils": "^1.0.7",
     "dva": "^2.4.0",
     "dva-loading": "^2.0.5",
     "fetch-mock": "^6.4.3",
