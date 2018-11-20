@@ -1,63 +1,38 @@
 import { routerRedux } from 'dva/router';
-import { login } from '../service';
+import { remote } from 'electron';
 import $$ from 'cmn-utils';
 
 export default {
   namespace: 'login',
 
   state: {
-    loggedIn: false,
-    message: '',
-    user: {},
-  },
-
-  subscriptions: {
-    setup({ history, dispatch }) {
-      return history.listen(({ pathname }) => {
-        if (pathname === '/user/login') {
-          $$.removeStore("user");
-        }
-      });
-    },
+    directoryPath: null
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
-      const {status, message, data} = yield call(login, payload)
-      if (status) {
-        $$.setStore('user', data);
-        yield put({
-          type: 'loginSuccess',
-          payload: data
-        })
-        yield put(routerRedux.push('/'));
-      } else {
-        yield put({
-          type: 'loginError',
-          payload: {message}
-        })
+    *openDirectory({ payload }, { call, put }) {
+      try {
+        const openDirectory = remote.dialog.showOpenDialog({
+          properties: ['openDirectory']
+        });
+        if (openDirectory) {
+          yield put({
+            type: 'changeStatus',
+            payload: { directoryPath: openDirectory[0] }
+          });
+        } 
+      } catch (e) {
+        console.log(e);
       }
-    },
-    *logout(_, { put }) {
-
-    },
+    }
   },
 
   reducers: {
-    loginSuccess(state, { payload }) {
+    changeStatus(state, { payload }) {
       return {
         ...state,
-        loggedIn: true,
-        message: '',
-        user: payload
-      };
-    },
-    loginError(state, { payload }) {
-      return {
-        ...state,
-        loggedIn: false,
-        message: payload.message
+        ...payload
       };
     }
-  },
+  }
 };

@@ -3,6 +3,8 @@ const { injectBabelPlugin } = require('react-app-rewired');
 const rewireLess = require('react-app-rewire-less-modules');
 
 module.exports = function override(config, env) {
+  config.target = 'electron-renderer';
+  
   config.resolve = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
