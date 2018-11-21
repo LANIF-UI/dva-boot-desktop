@@ -44,7 +44,6 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f9f9f9;
 }
 
 ul,
@@ -76,11 +75,19 @@ code {
 
 /* 重写antd默认布局样式 */
 .ant-layout {
+  background: transparent;
+  &.full-layout {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
   .ant-layout-header {
     height: auto;
     line-height: normal;
     padding: 0;
-    background: #fff;
     overflow: hidden;
   }
 
@@ -90,20 +97,12 @@ code {
   }
 
   .ant-layout-footer {
-    text-align: center;
     width: 100%;
-    background-color: #fff;
-    padding: 10px;
   }
 }
 
 // 在路由页中的布局
 .page {
-  &.ant-layout {
-    > .ant-layout-content {
-      padding: 24px 24px 0px;
-    }
-  }
   p {
     a,
     a:link {

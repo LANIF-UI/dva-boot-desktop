@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Switch, NavLink } from 'dva/router';
+import { Switch } from 'dva/router';
 import './styles/user.less';
 
 @connect()

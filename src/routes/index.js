@@ -3,8 +3,7 @@ import BaseLayout from '@/layouts/BasicLayout';
 import UserLayout from '@/layouts/UserLayout';
 import NotFound from './Pages/404';
 import Login from './Login';
-import Home from './Home';
-import UserInfo from './UserInfo';
+import CreateProject from './CreateProject';
 
 const routesConfig = (app) => ([
   {
@@ -22,8 +21,7 @@ const routesConfig = (app) => ([
     component: BaseLayout,
     indexRoute: '/home',
     childRoutes: [
-      Home(app),
-      UserInfo(app),
+      CreateProject(app),
       NotFound()
     ]
   }
