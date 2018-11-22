@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Layout, Icon, Menu, Button } from 'antd';
+import BaseComponent from 'components/BaseComponent';
 import './style/index.less';
 const { Header, Content } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
-class Explorer extends Component {
-  newPage = () => {
+class Explorer extends BaseComponent {
+  importProject = () => {
 
-  }
+  };
 
   render() {
     const PagesTitle = (
       <div className="menu-pages">
         <span>路由页</span>
         <span className="action">
-          <Button size="small" >new</Button>
+          <Button size="small">new</Button>
         </span>
       </div>
     );
@@ -24,7 +25,7 @@ class Explorer extends Component {
       <div className="menu-mocks">
         <span>模拟数据</span>
         <span className="action">
-          <Button size="small" >new</Button>
+          <Button size="small">new</Button>
         </span>
       </div>
     );
@@ -33,7 +34,7 @@ class Explorer extends Component {
       <div className="menu-conf">
         <span>配置</span>
         <span className="action">
-          <Button size="small" >new</Button>
+          <Button size="small">new</Button>
         </span>
       </div>
     );
@@ -43,8 +44,18 @@ class Explorer extends Component {
         <Header className="explorer-layout-header">
           <span>资源管理器</span>
           <div className="actions">
-            <Icon title="导入" type="folder-open" theme="filled" />
-            <Icon title="新建" type="folder-add" theme="filled" />
+            <Icon
+              title="导入"
+              onClick={this.importProject}
+              type="folder-open"
+              theme="filled"
+            />
+            <Icon
+              title="新建"
+              onClick={e => this.history.push('/createProject')}
+              type="folder-add"
+              theme="filled"
+            />
           </div>
         </Header>
         <Content>

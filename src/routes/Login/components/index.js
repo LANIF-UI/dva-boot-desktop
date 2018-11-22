@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Button } from 'antd';
 import logo from 'assets/images/logo.png';
 import BaseComponent from 'components/BaseComponent';
+import { version } from 'package';
 import './style.less';
 const { Content } = Layout;
 
@@ -27,7 +28,7 @@ export default class Login extends BaseComponent {
             <img src={logo} alt="" />
           </div>
           <div className="version">
-            <span>v1.0.0</span>
+            <span>{version}</span>
           </div>
           <div className="actions">
             <Button onClick={this.onCreate} type="primary" block>创建</Button>

@@ -23,9 +23,11 @@
     "antd": "^3.10.0",
     "classnames": "^2.2.5",
     "cmn-utils": "^1.0.7",
+    "download": "^7.1.0",
     "dva": "^2.4.0",
     "dva-loading": "^2.0.5",
     "fetch-mock": "^6.4.3",
+    "fs-extra": "^7.0.1",
     "object.omit": "^3.0.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0"

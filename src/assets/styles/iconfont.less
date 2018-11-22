@@ -1,0 +1,54 @@
+.ad {
+  position: relative;
+  display: inline-block;
+  font: normal normal normal 16px/1 Icomoon;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+}
+.antui-icon.spin:before {
+  display: inline-block;
+  animation: loadingCircle 1s infinite linear;
+}
+
+@keyframes loadingCircle {
+  0% {
+    transform-origin: 50% 50%;
+    transform: rotate(0deg);
+  }
+  100% {
+    transform-origin: 50% 50%;
+    transform: rotate(360deg);
+  }
+}
+
+// 使用其它图标库
+@font-face {
+  font-family: 'iconfont';
+  src: url('../fonts/iconfont/iconfont.eot');
+  src: url('../fonts/iconfont/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/iconfont/iconfont.woff') format('woff'),
+    url('../fonts/iconfont/iconfont.ttf') format('truetype'),
+    url('../fonts/iconfont/iconfont.svg#iconfont') format('svg');
+}
+
+.iconfont{
+  position: relative;
+  display: inline-block;
+  font: normal normal normal 16px/1 'iconfont';
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+}
+
+.iconfont-webpack:before { content: "\e600"; }
+.iconfont-vscode:before { content: "\e603"; }
+.iconfont-chrome:before { content: "\e683"; }
+.iconfont-start:before { content: "\e62e"; }
+.iconfont-build:before { content: "\e61b"; }
+.iconfont-cmd:before { content: "\e697"; }
+.iconfont-stop:before { content: "\e61a"; }

@@ -1,0 +1,32 @@
+@import '~antd/lib/style/themes/default.less';
+.top-toolbar {
+  border-bottom: 1px solid #ddd;
+  background: #f8f8f8;
+  padding: 0 10px;
+  .col {
+    transition: .5s;
+    display: inline-block;
+    padding: 10px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    &:hover {
+      border-color: #666;
+    }
+    i {
+      font-size: 2.6em;
+      color: #999;
+      cursor: pointer;
+      transition: .3s;
+      &:hover {
+        color: #001529;
+      }
+      &:active {
+        color: @primary-6;
+      }
+    }
+  }
+  .right {
+    float: right;
+    margin-top: 15px;
+  }
+}

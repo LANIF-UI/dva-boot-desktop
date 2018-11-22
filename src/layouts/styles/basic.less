@@ -1,6 +1,12 @@
 .basic-layout {
+  .basic-layout-header {
+    background: transparent;
+  }
   .basic-layout-siderbar {
     background: #f3f3f3;
+  }
+  .router-page {
+    
   }
   .basic-layout-footer {
     background: #007acc;
@@ -9,10 +15,27 @@
     line-height: 22px;
     color: #fff;
     font-size: 12px;
+    position: relative;
     > i {
       font-size: 14px;
       cursor: pointer;
       margin-right: 12px;
+    }
+    .project-info {
+      position: absolute;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+      > span {
+        border: 1px solid;
+        border-radius: 4px;
+        padding: 0 4px;
+        font-weight: 700;
+      }
+    }
+    .version {
+      float: right;
     }
   }
 }

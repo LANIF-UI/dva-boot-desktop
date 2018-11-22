@@ -9,7 +9,9 @@ module.exports = function override(config, env) {
     alias: {
       '@': path.resolve(__dirname, 'src'),
       components: path.resolve(__dirname, 'src/components'),
-      assets: path.resolve(__dirname, 'src/assets')
+      assets: path.resolve(__dirname, 'src/assets'),
+      package: path.resolve(__dirname, 'package.json'),
+      utils: path.resolve(__dirname, 'src/utils'),
     }
   };
 
