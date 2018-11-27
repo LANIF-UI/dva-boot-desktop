@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Layout, Form, Input, Icon, Tabs, Button, Checkbox, Select } from 'antd';
 import { connect } from 'dva';
 import { openDirectory } from 'utils/common';
-import { existsSync } from 'fs-extra';
-import { join, dirname, basename } from 'path';
+import { join } from 'path';
 import './index.less';
 
 const TabPane = Tabs.TabPane;
