@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { Layout, Form, Input, Icon, Tabs, Button, Checkbox, Select } from 'antd';
+import {
+  Layout,
+  Form,
+  Input,
+  Icon,
+  Tabs,
+  Button,
+  Checkbox,
+  Select
+} from 'antd';
 import { connect } from 'dva';
 import { openDirectory } from 'utils/common';
 import { join } from 'path';
@@ -10,53 +19,55 @@ const { Header, Content } = Layout;
 const createForm = Form.create;
 const Option = Select.Option;
 
-@connect()
+@connect(({ createProject }) => ({ createProject }))
 class CreateProject extends Component {
   state = {
-    directory: null,
-    directoryPath: null
+    directory: null
   };
 
   onOpenDirectory = () => {
-    const { getFieldValue } = this.props.form;
+    const { getFieldValue, setFieldsValue } = this.props.form;
     const name = getFieldValue('name') || '';
     const directory = openDirectory();
     if (directory) {
       const directoryPath = join(directory, name);
-      this.setState({
-        directory,
+      setFieldsValue({
         directoryPath
+      });
+      this.setState({
+        directory
       });
     }
   };
 
   onChangeName = e => {
+    const { setFieldsValue } = this.props.form;
     const { directory } = this.state;
     const name = e.target.value;
     if (directory) {
-      this.setState({
+      setFieldsValue({
         directoryPath: join(directory, name)
       });
     }
   };
 
   handleSubmit = e => {
+    const { dispatch } = this.props;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        dispatch({
+          type: 'createProject/newProject',
+          payload: values
+        });
       }
     });
   };
 
-  createIt = () => {
-    // 下载模板
-
-    // 
-  };
-
   render() {
-    const { directoryPath } = this.state;
-    const { getFieldDecorator } = this.props.form;
+    const { createProject, form } = this.props;
+    const { getFieldDecorator } = form;
+    const { download, create, install, complete } = createProject;
     const formItemLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 16 }
@@ -75,11 +86,15 @@ class CreateProject extends Component {
                 <Form.Item label="选择模板" {...formItemLayout}>
                   {getFieldDecorator('template', {
                     rules: [{ required: true, message: '请选择模板' }],
-                    initialValue: 'dva-boot-admin',
+                    initialValue: 'dva-boot-admin'
                   })(
                     <Select>
-                      <Option value="dva-boot-admin">DVA-BOOT-ADMIN(桌面端)</Option>
-                      <Option value="dva-boot-mobile">DVA-BOOT-MOBILE(移动端)</Option>
+                      <Option value="dva-boot-admin">
+                        DVA-BOOT-ADMIN(桌面端)
+                      </Option>
+                      <Option value="dva-boot-mobile">
+                        DVA-BOOT-MOBILE(移动端)
+                      </Option>
                       <Option value="dva-boot">DVA-BOOT(基础工程)</Option>
                     </Select>
                   )}
@@ -105,8 +120,7 @@ class CreateProject extends Component {
                 </Form.Item>
                 <Form.Item label="路径" {...formItemLayout}>
                   {getFieldDecorator('directoryPath', {
-                    rules: [{ required: true, message: '请选择项目路径' }],
-                    initialValue: directoryPath
+                    rules: [{ required: true, message: '请选择项目路径' }]
                   })(
                     <Input
                       readOnly
@@ -122,8 +136,13 @@ class CreateProject extends Component {
                   })(<Checkbox>保留示例页面</Checkbox>)}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                  <Button icon="plus" type="primary" htmlType="submit">
-                    创建
+                  <Button
+                    icon="plus"
+                    type="primary"
+                    htmlType="submit"
+                    loading={!!download || !!create || !!install}
+                  >
+                    {download || create || install || complete || '创建'}
                   </Button>
                 </Form.Item>
               </Form>

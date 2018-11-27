@@ -10,69 +10,107 @@ export default modelEnhance({
   namespace: 'createProject',
 
   state: {
+    projectInfo: {},
     download: false,
     create: false,
-    install: false
+    install: false,
+    complete: false,
   },
 
   effects: {
+    // 0.开始创建工程
+    *newProject({ payload }, { call, put }) {
+      yield put({
+        type: 'download',
+        payload
+      });
+    },
     // 1.下载模板文件
     *download({ payload }, { call, put }) {
       const { template } = payload;
-      yield call({
+      yield put({
         type: 'changeStatus',
-        payload: { download: true }
+        payload: {
+          download: '1.下载模板文件',
+          create: false,
+          install: false,
+          complete: false,
+          projectInfo: payload
+        }
       });
-      yield boilerplate.downloadDBA(template);
-      yield call({
+      const projectPath = yield boilerplate.downloadDBA(template);
+      yield put({
         type: 'create',
         payload: {
-          download: false
+          projectPath
         }
       });
     },
     // 2.创建工程目录
     *create({ payload }, { select, call, put }) {
-      yield call({
+      yield put({
         type: 'changeStatus',
-        payload: { download: false, create: true }
-      });
-
-      const {
-        selectBoilerplate, initSetting, selectExtendsProj
-      } = yield select(state => state.projectCreate);
-      const sourceDir = join(selectBoilerplate.path, 'proj');
-
-
-      glob.sync('**', {
-        cwd: sourceDir,
-        nodir: true,
-        dot: true
-      }).forEach((source) => {
-        if (selectExtendsProj.filter && selectExtendsProj.filter(source, initSetting) === false) {
-          return false;
+        payload: {
+          create: '2.创建工程目录',
+          download: false,
+          install: false,
+          complete: false
         }
-        const subDir = source.replace(/__(\w+)__/g, (match, offset) => initSetting[offset]);
-
-        const target = join(initSetting.projPath, subDir);
-
-        mkdirp.sync(dirname(target));
-
-        source = join(sourceDir, source);
-
-        writeToFile(source, target, initSetting);
-        return true;
       });
+      const { projectPath } = payload;
+      const { projectInfo } = yield select(state => state.createProject);
+      glob
+        .sync('**', {
+          cwd: projectPath,
+          nodir: true,
+          dot: true
+        })
+        .forEach(source => {
+          const subDir = source.replace(
+            /__(\w+)__/g,
+            (match, offset) => projectInfo[offset]
+          );
+          const target = join(projectInfo.directoryPath, subDir);
+
+          mkdirp.sync(dirname(target));
+
+          source = join(projectPath, source);
+
+          writeToFile(source, target, projectInfo);
+          return true;
+        });
 
       // 文件复制成功后，开始安装依赖
       yield put({
-        type: 'install',
-        payload: { isRetry: false },
+        type: 'install'
       });
     },
     // 3.安装依赖
     *install({ payload }, { call, put }) {
+      yield put({
+        type: 'changeStatus',
+        payload: {
+          install: '3.安装依赖',
+          download: false,
+          create: false,
+          complete: false
+        }
+      });
 
+      yield put({
+        type: 'complete'
+      });
+    },
+    *complete({ payload }, { call, put }) {
+      yield put({
+        type: 'changeStatus',
+        payload: {
+          complete: '重新创建',
+          create: false,
+          download: false,
+          install: false,
+        }
+      });
     }
   },
 

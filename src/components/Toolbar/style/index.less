@@ -6,14 +6,14 @@
   .col {
     transition: .5s;
     display: inline-block;
-    padding: 10px;
+    padding: 5px 10px;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
     &:hover {
       border-color: #666;
     }
     i {
-      font-size: 2.6em;
+      font-size: 24px;
       color: #999;
       cursor: pointer;
       transition: .3s;
@@ -23,6 +23,11 @@
       &:active {
         color: @primary-6;
       }
+    }
+    span {
+      display: inline-block;
+      width: 0;
+      transform: translateX(-100%);
     }
   }
   .right {
