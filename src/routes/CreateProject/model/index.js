@@ -4,7 +4,7 @@ import mkdirp from 'mkdirp';
 import glob from 'glob';
 import { join, dirname } from 'path';
 import { writeToFile } from 'utils/common';
-const { boilerplate } = remote.getGlobal('services');
+const { boilerplate, commands } = remote.getGlobal('services');
 
 export default modelEnhance({
   namespace: 'createProject',
@@ -82,7 +82,8 @@ export default modelEnhance({
 
       // 文件复制成功后，开始安装依赖
       yield put({
-        type: 'install'
+        type: 'install',
+        payload: { projectInfo }
       });
     },
     // 3.安装依赖
@@ -90,16 +91,31 @@ export default modelEnhance({
       yield put({
         type: 'changeStatus',
         payload: {
-          install: '3.安装依赖',
+          install: '3.安装依赖，需要一段时间',
           download: false,
           create: false,
           complete: false
         }
       });
 
-      yield put({
-        type: 'complete'
+      const { projectInfo } = payload;
+
+      const { status } = yield commands.installPackage({
+        root: projectInfo.directoryPath,
+        sender: 'import',
       });
+
+      if (status) {
+        console.log('install success')
+        yield put({
+          type: 'complete'
+        });
+      } else {
+        console.log('install err')
+        yield put({
+          type: 'complete'
+        });
+      }
     },
     *complete({ payload }, { call, put }) {
       yield put({

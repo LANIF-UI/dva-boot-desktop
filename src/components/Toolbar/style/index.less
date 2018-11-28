@@ -1,37 +1,53 @@
 @import '~antd/lib/style/themes/default.less';
+
 .top-toolbar {
   border-bottom: 1px solid #ddd;
   background: #f8f8f8;
   padding: 0 10px;
+  display: flex;
+  height: 36px;
+  position: relative;
+  overflow: hidden;
   .col {
-    transition: .5s;
-    display: inline-block;
-    padding: 5px 10px;
-    border-bottom: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 10px;
+    border-bottom: 3px solid transparent;
     margin-bottom: -1px;
+    color: #aaa;
+    cursor: pointer;
     &:hover {
       border-color: #666;
+      color: #666;
+      > span, > i {
+        transform: translateY(-100%);
+      }
     }
-    i {
+    &:active {
+      color: @primary-6;
+      border-color: @primary-6;
+    }
+    > i {
+      height: 36px;
+      flex: none;
       font-size: 24px;
-      color: #999;
-      cursor: pointer;
       transition: .3s;
-      &:hover {
-        color: #001529;
-      }
-      &:active {
-        color: @primary-6;
-      }
+      display: flex;
+      align-items: center;
     }
     span {
-      display: inline-block;
-      width: 0;
-      transform: translateX(-100%);
+      flex: none;
+      line-height: 36px;
+      transition: .3s;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
   .right {
-    float: right;
-    margin-top: 15px;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
   }
 }

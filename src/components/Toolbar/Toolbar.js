@@ -25,7 +25,7 @@ class Toolbar extends Component {
         </div>
         <div className="col">
           <Icon type="cmd" font="iconfont" />
-          <span>命令行</span>
+          <span>终端</span>
         </div>
         <div className="right">
           <Button icon="form" size="small">

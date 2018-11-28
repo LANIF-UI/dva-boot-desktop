@@ -7,16 +7,16 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
 class Explorer extends BaseComponent {
-  importProject = () => {
-
-  };
+  importProject = () => {};
 
   render() {
     const PagesTitle = (
       <div className="menu-pages">
         <span>路由页</span>
         <span className="action">
-          <Button size="small">new</Button>
+          <Button size="small" type="primary">
+            新增
+          </Button>
         </span>
       </div>
     );
@@ -25,7 +25,9 @@ class Explorer extends BaseComponent {
       <div className="menu-mocks">
         <span>模拟数据</span>
         <span className="action">
-          <Button size="small">new</Button>
+          <Button size="small" type="primary">
+            新增
+          </Button>
         </span>
       </div>
     );
@@ -33,9 +35,6 @@ class Explorer extends BaseComponent {
     const ConfTitle = (
       <div className="menu-conf">
         <span>配置</span>
-        <span className="action">
-          <Button size="small">new</Button>
-        </span>
       </div>
     );
 
