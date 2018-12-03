@@ -20,6 +20,7 @@ module.exports = function override(config, env) {
   if (env === 'development') {
     config = injectBabelPlugin(['dva-hmr'], config);
   } else {
+    // 替换uglify为uglify-es否则,build时会出错
     config = removeWebpackPlugins(config, env, {
       pluginNames: ['UglifyJsPlugin']
     });
