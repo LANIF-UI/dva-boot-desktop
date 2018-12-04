@@ -66,6 +66,13 @@
     },
     "directories": {
       "buildResources": "public"
-    }
+    },
+    "files": [
+      "!node_modules/antd",
+      "!node_modules/dva",
+      "!node_modules/react",
+      "!node_modules/react-dom",
+      "!node_modules/fetch-mock"
+    ]
   }
 }
