@@ -8,17 +8,18 @@ import './styles/basic.less';
 import { version } from 'package';
 const { Header, Content, Footer, Sider } = Layout;
 
-@connect()
+@connect(({ global }) => ({ global }))
 export default class BasicLayout extends React.PureComponent {
   render() {
-    const { routerData } = this.props;
+    const { global, routerData } = this.props;
+    const { projects } = global;
     const { childRoutes } = routerData;
 
     return (
       <Layout className="basic-layout full-layout">
         <Layout>
           <Sider className="basic-layout-siderbar">
-            <Explorer />
+            <Explorer projects={projects} />
           </Sider>
           <Layout>
             <Header className="basic-layout-header">

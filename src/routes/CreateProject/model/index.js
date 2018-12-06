@@ -1,10 +1,7 @@
 import modelEnhance from '@/utils/modelEnhance';
 import { remote } from 'electron';
-import mkdirp from 'mkdirp';
-import glob from 'glob';
-import { join, dirname } from 'path';
-import { writeToFile } from 'utils/common';
-const { boilerplate, commands } = remote.getGlobal('services');
+import { copySync } from 'fs-extra';
+const { boilerplate, commands, utils } = remote.getGlobal('services');
 
 export default modelEnhance({
   namespace: 'createProject',
@@ -14,7 +11,7 @@ export default modelEnhance({
     download: false,
     create: false,
     install: false,
-    complete: false,
+    complete: false
   },
 
   effects: {
@@ -59,27 +56,16 @@ export default modelEnhance({
       });
       const { projectPath } = payload;
       const { projectInfo } = yield select(state => state.createProject);
-      glob
-        .sync('**', {
-          cwd: projectPath,
-          nodir: true,
-          dot: true
-        })
-        .forEach(source => {
-          const subDir = source.replace(
-            /__(\w+)__/g,
-            (match, offset) => projectInfo[offset]
-          );
-          const target = join(projectInfo.directoryPath, subDir);
-
-          mkdirp.sync(dirname(target));
-
-          source = join(projectPath, source);
-
-          writeToFile(source, target, projectInfo);
-          return true;
-        });
-
+      const { name, version = '1.0.0', description, baseURL = '/' } = projectInfo;
+      // 复制文件
+      copySync(projectPath, projectInfo.directoryPath);
+      // 写入package.json
+      utils.writePackage(projectInfo.directoryPath, {
+        name,
+        version,
+        description,
+        baseURL
+      });
       // 文件复制成功后，开始安装依赖
       yield put({
         type: 'install',
@@ -102,16 +88,16 @@ export default modelEnhance({
 
       const { status } = yield commands.installPackage({
         root: projectInfo.directoryPath,
-        sender: 'import',
+        sender: 'import'
       });
 
       if (status) {
-        console.log('install success')
+        console.log('install success');
         yield put({
           type: 'complete'
         });
       } else {
-        console.log('install err')
+        console.log('install err');
         yield put({
           type: 'complete'
         });
@@ -124,7 +110,7 @@ export default modelEnhance({
           complete: '重新创建',
           create: false,
           download: false,
-          install: false,
+          install: false
         }
       });
     }

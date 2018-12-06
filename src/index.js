@@ -21,7 +21,7 @@ require('./__mocks__');
 dynamic.setDefaultLoadingComponent(() => config.router.loading);
 
 // -> 注册全局模型
-// app.model(require('./models/global').default);
+app.model(require('./models/global').default);
 
 // -> 初始化路由
 app.router(({ history, app }) => (
