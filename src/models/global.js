@@ -1,70 +1,57 @@
 import $$ from 'cmn-utils';
 import modelEnhance from '@/utils/modelEnhance';
-import { routerRedux } from 'dva/router';
 import glob from 'glob';
+import { remote } from 'electron';
+const config = remote.getGlobal('config');
 
 export default modelEnhance({
   namespace: 'global',
 
   state: {
-    // 当前项目下的工程
-    projects: [],
+    /**
+     * 当前项目下的工程
+     * [
+     *   {
+     *      name: '// 工程名',
+     *      routes: [ { name: '', path: '' } ],
+     *      mocks: [ { name: '', path: '' } ],
+     *      config: { proxy: ... },
+     *   }
+     * ]
+     */
+    projects: []
   },
 
-  effects: {
-    *setProjects({ payload }, { call, put }) {
-      const { projectPath } = payload;
-      glob.sync('**/routes/**/components', {
-        cwd: projectPath,
-        dot: true
-      }).forEach((source) => {
-        
-        return true;
-      });
-    },
-
-    *getSubMenu({ payload: { currentPath, subpath } }, { call, put, select }) {
-      const { menu } = yield select(state => state.global);
-      const subMenu = menu.filter(item => item.path === currentPath)[0].children
-
-      yield put(routerRedux.push(subpath || subMenu[0].path || '/notfound'));
-
-      yield put({
-        type: 'getSubMenuSuccess',
-        payload: subMenu
-      });
-    }
-  },
+  effects: {},
 
   reducers: {
-    getMenuSuccess(state, { payload }) {
+    setProjects(state, { payload }) {
+      const { projects } = state;
+      const { projectInfo } = payload;
+      const { name, directoryPath } = projectInfo;
+      const proj = projects.filter(item => item.name !== name);
+      const routes = [];
+      const mocks = [];
+      console.log(directoryPath);
+      glob
+        .sync('**/routes/**/components', {
+          cwd: directoryPath,
+          dot: true
+        })
+        .forEach(source => {
+          routes.push(source);
+          console.log(source)
+        });
+      proj.concat({
+        name,
+        routes,
+        mocks
+      });
+      config.setItem('projects', proj);
       return {
         ...state,
-        menu: payload,
-        flatMenu: getFlatMenu(payload),
+        projects: proj
       };
-    },
-
-    getSubMenuSuccess(state, { payload }) {
-      return {
-        ...state,
-        subMenu: payload
-      }
     }
-  },
+  }
 });
-
-export function getFlatMenu(menus) {
-  let menu = [];
-  menus.forEach(item => {
-    if (item.children) {
-      menu = menu.concat(getFlatMenu(item.children));
-    }
-    menu.push(item);
-  });
-  return menu;
-}
-
-export async function getMenu(payload) {
-  return $$.post('/user/menu', payload);
-}

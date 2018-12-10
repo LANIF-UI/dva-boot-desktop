@@ -56,7 +56,12 @@ export default modelEnhance({
       });
       const { projectPath } = payload;
       const { projectInfo } = yield select(state => state.createProject);
-      const { name, version = '1.0.0', description, baseURL = '/' } = projectInfo;
+      const {
+        name,
+        version = '1.0.0',
+        description,
+        baseURL = '/'
+      } = projectInfo;
       // 复制文件
       copySync(projectPath, projectInfo.directoryPath);
       // 写入package.json
@@ -66,6 +71,11 @@ export default modelEnhance({
         description,
         baseURL
       });
+      yield put({
+        type: 'global/setProjects',
+        payload: { projectInfo }
+      });
+      return;
       // 文件复制成功后，开始安装依赖
       yield put({
         type: 'install',

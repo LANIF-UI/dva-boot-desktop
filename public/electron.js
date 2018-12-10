@@ -4,6 +4,7 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
 const services = require('./services');
+const store = require('./services/store');
 const IS_DEV = process.env.NODE_ENV === 'development';
 
 // 保持一个对于 window 对象的全局引用，如果你不这样做，
@@ -67,3 +68,4 @@ app.on('activate', () => {
 });
 
 global.services = services;
+global.config = store;
