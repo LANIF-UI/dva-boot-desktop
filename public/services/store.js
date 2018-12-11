@@ -25,7 +25,7 @@ function initConfig() {
     }
     const defalutConfig = {};
     const content = JSON.stringify(defalutConfig);
-    fs.writeFileSync(localConfig.configUrl, content);
+    fs.writeFileSync(localConfig.configUrl, content, 'utf8');
     localConfig.config = defalutConfig;
     return true;
   } catch (e) {
@@ -49,7 +49,7 @@ function readConfig() {
 function writeConfig(value) {
   try {
     const content = JSON.stringify(value);
-    fs.writeFileSync(localConfig.configUrl, content);
+    fs.writeFileSync(localConfig.configUrl, content, 'utf8');
     return true;
   } catch (e) {
     return false;
