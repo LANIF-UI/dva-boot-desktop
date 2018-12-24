@@ -12,14 +12,14 @@ const { Header, Content, Footer, Sider } = Layout;
 export default class BasicLayout extends React.PureComponent {
   render() {
     const { global, routerData } = this.props;
-    const { projects } = global;
+    const { projects, currentProject } = global;
     const { childRoutes } = routerData;
 
     return (
       <Layout className="basic-layout full-layout">
         <Layout>
           <Sider className="basic-layout-siderbar">
-            <Explorer projects={projects} />
+            <Explorer projects={projects} currentProject={currentProject} />
           </Sider>
           <Layout>
             <Header className="basic-layout-header">
@@ -34,9 +34,11 @@ export default class BasicLayout extends React.PureComponent {
           <Icon type="setting" theme="filled" />
           <Icon type="github" theme="filled" />
           <Icon type="question-circle" theme="filled" />
-          <div className="project-info">
-            dva-boot-admin (d:\abc) - <span color="#2db7f5">运行中</span>
-          </div>
+          {currentProject && currentProject[0] ? (
+            <div className="project-info">
+              {currentProject[0].name.toUpperCase()} ({currentProject[0].directoryPath}) - <span color="#2db7f5">运行中</span>
+            </div>
+          ) : null}
           <div className="version">版本 {version}</div>
         </Footer>
       </Layout>

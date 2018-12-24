@@ -1,10 +1,20 @@
 .home-page {
-  text-align: center;
-  img {
-    width: 200px;
-    margin: 30px 0;
+  padding: 8px;
+  .ant-row {
+    > div {
+      padding: 8px;
+    }
   }
-  div {
-    font-size: 16px;
+  .ant-card-extra {
+    a {
+      color: #1890ff;
+      vertical-align: middle;
+      &:hover {
+        color: tint(#1890ff, 20%);
+      }
+      &:active {
+        color: #1890ff;
+      }
+    }
   }
 }

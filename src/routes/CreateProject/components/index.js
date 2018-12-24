@@ -13,6 +13,7 @@ import { connect } from 'dva';
 import { openDirectory } from 'utils/common';
 import { join } from 'path';
 import './index.less';
+import { Link, routerRedux } from 'dva/router';
 
 const TabPane = Tabs.TabPane;
 const { Header, Content } = Layout;
@@ -65,7 +66,7 @@ class CreateProject extends Component {
   };
 
   render() {
-    const { createProject, form } = this.props;
+    const { createProject, form, dispatch } = this.props;
     const { getFieldDecorator } = form;
     const { download, create, install, complete } = createProject;
     const formItemLayout = {
@@ -143,6 +144,13 @@ class CreateProject extends Component {
                     loading={!!download || !!create || !!install}
                   >
                     {download || create || install || complete || '创建'}
+                  </Button>
+                  <Button
+                    style={{marginLeft: 5}}
+                    icon="home"
+                    onClick={e => dispatch(routerRedux.push('/home'))}
+                  >
+                    返回
                   </Button>
                 </Form.Item>
               </Form>
