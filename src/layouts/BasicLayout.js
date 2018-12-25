@@ -34,9 +34,9 @@ export default class BasicLayout extends React.PureComponent {
           <Icon type="setting" theme="filled" />
           <Icon type="github" theme="filled" />
           <Icon type="question-circle" theme="filled" />
-          {currentProject && currentProject[0] ? (
+          {currentProject ? (
             <div className="project-info">
-              {currentProject[0].name.toUpperCase()} ({currentProject[0].directoryPath}) - <span color="#2db7f5">运行中</span>
+              {currentProject.name.toUpperCase()} ({currentProject.directoryPath}) - <span color="#2db7f5">运行中</span>
             </div>
           ) : null}
           <div className="version">版本 {version}</div>

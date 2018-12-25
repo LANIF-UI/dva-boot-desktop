@@ -67,31 +67,29 @@ class Explorer extends BaseComponent {
             theme="dark"
             mode="inline"
           >
-            {currentProject.map((item, index) => (
-              <SubMenu
-                key={`${index}`}
-                title={
-                  <span className="project-title">
-                    <Icon type="project" />
-                    <span>{item.name.toUpperCase()}</span>
-                  </span>
-                }
-              >
-                <MenuItemGroup title={PagesTitle}>
-                  {item.routes.map((jtem, jndex) => (
-                    <Menu.Item key={jndex}>{jtem.title}</Menu.Item>
-                  ))}
-                </MenuItemGroup>
-                <MenuItemGroup title={MockTitle}>
-                  {item.mocks.map((jtem, jndex) => (
-                    <Menu.Item key={jndex}>{jtem.name}</Menu.Item>
-                  ))}
-                </MenuItemGroup>
-                <MenuItemGroup title={ConfTitle}>
-                  <Menu.Item key="3">config.js</Menu.Item>
-                </MenuItemGroup>
-              </SubMenu>
-            ))}
+            <SubMenu
+              key="0"
+              title={
+                <span className="project-title">
+                  <Icon type="project" />
+                  <span>{currentProject.name.toUpperCase()}</span>
+                </span>
+              }
+            >
+              <MenuItemGroup title={PagesTitle}>
+                {currentProject.routes.map((jtem, jndex) => (
+                  <Menu.Item key={jndex}>{jtem.title}</Menu.Item>
+                ))}
+              </MenuItemGroup>
+              <MenuItemGroup title={MockTitle}>
+                {currentProject.mocks.map((jtem, jndex) => (
+                  <Menu.Item key={jndex}>{jtem.name}</Menu.Item>
+                ))}
+              </MenuItemGroup>
+              <MenuItemGroup title={ConfTitle}>
+                <Menu.Item key="3">config.js</Menu.Item>
+              </MenuItemGroup>
+            </SubMenu>
           </Menu>
         </Content>
       </Layout>

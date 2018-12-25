@@ -23,8 +23,8 @@ export default modelEnhance({
      */
     projects: config.getItem('projects') || [],
     currentProject: config.getItem('projects')
-      ? config.getItem('projects').filter(item => item.active)
-      : []
+      ? config.getItem('projects').filter(item => item.active)[0]
+      : null
   },
 
   effects: {},

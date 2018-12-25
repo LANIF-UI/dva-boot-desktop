@@ -10,8 +10,8 @@ export default class Home extends BaseComponent {
   render() {
     const { currentProject } = this.props.global;
 
-    const routes = currentProject[0] ? currentProject[0].routes : [];
-    const mocks = currentProject[0] ? currentProject[0].mocks : [];
+    const routes = currentProject ? currentProject.routes : [];
+    const mocks = currentProject ? currentProject.mocks : [];
 
     return (
       <Layout className="home-page">
@@ -26,6 +26,7 @@ export default class Home extends BaseComponent {
                     </Tag>
                   ))}
                 </div>
+                {!routes.length && '无'}
               </Card>
             </Col>
             <Col xs={12} md={8} xl={6}>
@@ -35,7 +36,7 @@ export default class Home extends BaseComponent {
                     {item.name}
                   </Tag>
                 ))}
-                {!mocks.length && "无"}
+                {!mocks.length && '无'}
               </Card>
             </Col>
             <Col xs={12} md={8} xl={6}>
