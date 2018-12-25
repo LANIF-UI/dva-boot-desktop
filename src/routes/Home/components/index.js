@@ -1,7 +1,7 @@
 import './style.less';
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Row, Col, Card, Button, Icon } from 'antd';
+import { Layout, Row, Col, Card, Tag } from 'antd';
 import BaseComponent from 'components/BaseComponent';
 const { Content } = Layout;
 
@@ -19,22 +19,33 @@ export default class Home extends BaseComponent {
           <Row>
             <Col xs={12} md={8} xl={6}>
               <Card title={`路由页 (${routes.length})`} extra={<a>新增</a>}>
-                Card content
+                <div className="router-card-body">
+                  {routes.map((item, index) => (
+                    <Tag key={index} color="red">
+                      {item.title}
+                    </Tag>
+                  ))}
+                </div>
               </Card>
             </Col>
             <Col xs={12} md={8} xl={6}>
               <Card title={`模拟数据 (${mocks.length})`} extra={<a>新增</a>}>
-                Card content
+                {mocks.map((item, index) => (
+                  <Tag key={index} color="red">
+                    {item.name}
+                  </Tag>
+                ))}
+                {!mocks.length && "无"}
               </Card>
             </Col>
             <Col xs={12} md={8} xl={6}>
               <Card title="代理配置" extra={<a>设置</a>}>
-                Card content
+                无
               </Card>
             </Col>
             <Col xs={12} md={8} xl={6}>
-              <Card title="Card title" extra={<a>新增</a>}>
-                Card content
+              <Card title="系统配置" extra={<a>设置</a>}>
+                无
               </Card>
             </Col>
           </Row>

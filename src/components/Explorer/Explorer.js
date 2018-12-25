@@ -64,6 +64,7 @@ class Explorer extends BaseComponent {
             className="explorer-menu"
             onClick={this.handleClick}
             defaultOpenKeys={['0']}
+            theme="dark"
             mode="inline"
           >
             {currentProject.map((item, index) => (
