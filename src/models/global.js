@@ -40,30 +40,8 @@ export default modelEnhance({
           return item;
         })
         .filter(item => item.name !== name);
-      const routes = [];
-      const mocks = [];
-
-      glob
-        .sync('**/routes/**/components', {
-          cwd: directoryPath,
-          dot: true
-        })
-        .forEach(source => {
-          const route = join(source, `..${sep}index.js`);
-          const model = join(source, `..${sep}model${sep}index.js`);
-          const { link, title } = getModelInfo(join(directoryPath, route));
-          const ns = getNS(join(directoryPath, model));
-          const name = getRouteName(source);
-          if (route) {
-            routes.push({
-              name,
-              title,
-              link,
-              namespace: ns,
-              path: route
-            });
-          }
-        });
+      const routes = getRoutes(directoryPath);
+      const mocks = getMocks(directoryPath);
 
       const proj = {
         name,
@@ -83,6 +61,56 @@ export default modelEnhance({
     }
   }
 });
+
+const getRoutes = directoryPath => {
+  const routes = [];
+
+  glob
+    .sync('**/routes/**/components', {
+      cwd: directoryPath,
+      ignore: 'node_modules/**',
+      dot: true
+    })
+    .forEach(source => {
+      const route = join(source, `..${sep}index.js`);
+      const model = join(source, `..${sep}model${sep}index.js`);
+      const { link, title } = getModelInfo(join(directoryPath, route));
+      const ns = getNS(join(directoryPath, model));
+      const name = getRouteName(source);
+      if (link) {
+        routes.push({
+          name,
+          title,
+          link,
+          namespace: ns,
+          path: route
+        });
+      }
+    });
+  return routes;
+};
+
+const getMocks = directoryPath => {
+  const mocks = [];
+
+  glob
+    .sync('src/__mocks__/*', {
+      cwd: directoryPath,
+      nodir: true,
+      ignore: 'index.js'
+    })
+    .forEach(source => {
+      mocks.push({
+        name: source
+          .split('/')
+          .pop()
+          .split('.')
+          .shift(),
+        path: source
+      });
+    });
+  return mocks;
+};
 
 const getModelInfo = path => {
   try {

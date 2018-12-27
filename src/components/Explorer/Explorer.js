@@ -59,39 +59,41 @@ class Explorer extends BaseComponent {
             />
           </div>
         </Header>
-        <Content style={{ overflowY: 'auto' }}>
-          <Menu
-            className="explorer-menu"
-            onClick={this.handleClick}
-            defaultOpenKeys={['0']}
-            theme="dark"
-            mode="inline"
-          >
-            <SubMenu
-              key="0"
-              title={
-                <span className="project-title">
-                  <Icon type="project" />
-                  <span>{currentProject.name.toUpperCase()}</span>
-                </span>
-              }
+        {currentProject ? (
+          <Content style={{ overflowY: 'auto' }}>
+            <Menu
+              className="explorer-menu"
+              onClick={this.handleClick}
+              defaultOpenKeys={['0']}
+              theme="dark"
+              mode="inline"
             >
-              <MenuItemGroup title={PagesTitle}>
-                {currentProject.routes.map((jtem, jndex) => (
-                  <Menu.Item key={jndex}>{jtem.title}</Menu.Item>
-                ))}
-              </MenuItemGroup>
-              <MenuItemGroup title={MockTitle}>
-                {currentProject.mocks.map((jtem, jndex) => (
-                  <Menu.Item key={jndex}>{jtem.name}</Menu.Item>
-                ))}
-              </MenuItemGroup>
-              <MenuItemGroup title={ConfTitle}>
-                <Menu.Item key="3">config.js</Menu.Item>
-              </MenuItemGroup>
-            </SubMenu>
-          </Menu>
-        </Content>
+              <SubMenu
+                key="0"
+                title={
+                  <span className="project-title">
+                    <Icon type="project" />
+                    <span>{currentProject.name.toUpperCase()}</span>
+                  </span>
+                }
+              >
+                <MenuItemGroup title={PagesTitle}>
+                  {currentProject.routes.map((jtem, jndex) => (
+                    <Menu.Item key={jndex}>{jtem.title}</Menu.Item>
+                  ))}
+                </MenuItemGroup>
+                <MenuItemGroup title={MockTitle}>
+                  {currentProject.mocks.map((jtem, jndex) => (
+                    <Menu.Item key={jndex}>{jtem.name}</Menu.Item>
+                  ))}
+                </MenuItemGroup>
+                <MenuItemGroup title={ConfTitle}>
+                  <Menu.Item key="3">config.js</Menu.Item>
+                </MenuItemGroup>
+              </SubMenu>
+            </Menu>
+          </Content>
+        ) : null}
       </Layout>
     );
   }

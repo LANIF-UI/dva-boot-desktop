@@ -7,6 +7,10 @@ const { Content } = Layout;
 
 @connect(({ global }) => ({ global }))
 export default class Home extends BaseComponent {
+  enterRoute(item) {
+    this.history.push('/route')
+  }
+
   render() {
     const { currentProject } = this.props.global;
 
@@ -21,7 +25,11 @@ export default class Home extends BaseComponent {
               <Card title={`路由页 (${routes.length})`} extra={<a>新增</a>}>
                 <div className="router-card-body">
                   {routes.map((item, index) => (
-                    <Tag key={index} color="red">
+                    <Tag
+                      key={index}
+                      color="red"
+                      onClick={e => this.enterRoute(item)}
+                    >
                       {item.title}
                     </Tag>
                   ))}
@@ -31,11 +39,13 @@ export default class Home extends BaseComponent {
             </Col>
             <Col xs={12} md={8} xl={6}>
               <Card title={`模拟数据 (${mocks.length})`} extra={<a>新增</a>}>
-                {mocks.map((item, index) => (
-                  <Tag key={index} color="red">
-                    {item.name}
-                  </Tag>
-                ))}
+                <div className="router-card-body">
+                  {mocks.map((item, index) => (
+                    <Tag key={index} color="green">
+                      {item.name}
+                    </Tag>
+                  ))}
+                </div>
                 {!mocks.length && '无'}
               </Card>
             </Col>
