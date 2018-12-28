@@ -14,7 +14,7 @@ class Explorer extends BaseComponent {
 
     const PagesTitle = (
       <div className="menu-pages">
-        <span>路由页</span>
+        <span><Icon type="link" /> 路由页</span>
         <span className="action">
           <Button size="small" type="primary">
             新增
@@ -25,7 +25,7 @@ class Explorer extends BaseComponent {
 
     const MockTitle = (
       <div className="menu-mocks">
-        <span>模拟数据</span>
+        <span><Icon type="interation" /> 模拟数据</span>
         <span className="action">
           <Button size="small" type="primary">
             新增
@@ -36,7 +36,7 @@ class Explorer extends BaseComponent {
 
     const ConfTitle = (
       <div className="menu-conf">
-        <span>配置</span>
+        <span><Icon type="setting" /> 配置</span>
       </div>
     );
 

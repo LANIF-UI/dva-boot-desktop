@@ -8,7 +8,7 @@ const { Content } = Layout;
 @connect(({ global }) => ({ global }))
 export default class Home extends BaseComponent {
   enterRoute(item) {
-    this.history.push('/route')
+    this.history.push('/route?link=' + item.link)
   }
 
   render() {
