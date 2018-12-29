@@ -11,7 +11,8 @@ const writePackage = function(path, data) {
 
 // 从package.json里读内容
 const readPackage = function(path) {
-  return readJsonSync(path);
+  const pkgPath = join(path, 'package.json');
+  return readJsonSync(pkgPath);
 }
 
 exports.writePackage = writePackage;

@@ -32,7 +32,8 @@
     "fs-extra": "^7.0.1",
     "object.omit": "^3.0.0",
     "react": "^16.5.0",
-    "react-dom": "^16.5.0"
+    "react-dom": "^16.5.0",
+    "recast": "^0.16.1"
   },
   "devDependencies": {
     "autodll-webpack-plugin": "^0.3.8",

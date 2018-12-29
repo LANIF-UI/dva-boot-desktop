@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'dva/router';
 import { Layout, Icon, Menu, Button } from 'antd';
 import BaseComponent from 'components/BaseComponent';
 import './style/index.less';
@@ -14,7 +15,9 @@ class Explorer extends BaseComponent {
 
     const PagesTitle = (
       <div className="menu-pages">
-        <span><Icon type="link" /> 路由页</span>
+        <span>
+          <Icon type="link" /> 路由页
+        </span>
         <span className="action">
           <Button size="small" type="primary">
             新增
@@ -25,7 +28,9 @@ class Explorer extends BaseComponent {
 
     const MockTitle = (
       <div className="menu-mocks">
-        <span><Icon type="interation" /> 模拟数据</span>
+        <span>
+          <Icon type="interation" /> 模拟数据
+        </span>
         <span className="action">
           <Button size="small" type="primary">
             新增
@@ -36,7 +41,9 @@ class Explorer extends BaseComponent {
 
     const ConfTitle = (
       <div className="menu-conf">
-        <span><Icon type="setting" /> 配置</span>
+        <span>
+          <Icon type="setting" /> 配置
+        </span>
       </div>
     );
 
@@ -79,7 +86,14 @@ class Explorer extends BaseComponent {
               >
                 <MenuItemGroup title={PagesTitle}>
                   {currentProject.routes.map((jtem, jndex) => (
-                    <Menu.Item key={jndex}>{jtem.title}</Menu.Item>
+                    <Menu.Item key={jndex}>
+                      <Link to={'/route?link=' + jtem.link}>
+                        {jtem.title}-
+                        <strong style={{ color: '#c7254e' }}>
+                          {jtem.name}
+                        </strong>
+                      </Link>
+                    </Menu.Item>
                   ))}
                 </MenuItemGroup>
                 <MenuItemGroup title={MockTitle}>

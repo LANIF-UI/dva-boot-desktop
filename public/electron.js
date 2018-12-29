@@ -14,8 +14,8 @@ let win;
 function createWindow() {
   // 创建浏览器窗口。
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1024,
+    height: 768,
     //禁用跨域检查
     webPreferences: {
       webSecurity: false

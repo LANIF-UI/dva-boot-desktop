@@ -2,7 +2,7 @@ import modelEnhance from '@/utils/modelEnhance';
 import glob from 'glob';
 import { remote } from 'electron';
 import { readFileSync, existsSync } from 'fs-extra';
-const { join, sep } = require('path');
+import { join, sep } from 'path';
 const config = remote.getGlobal('config');
 
 export default modelEnhance({
@@ -76,7 +76,7 @@ const getRoutes = directoryPath => {
       const model = join(source, `..${sep}model${sep}index.js`);
       const { link, title } = getModelInfo(join(directoryPath, route));
       const ns = getNS(join(directoryPath, model));
-      const name = getRouteName(source);
+      const name = getRouteName(route);
       if (link) {
         routes.push({
           name,
@@ -127,7 +127,7 @@ const getModelInfo = path => {
 
 const getRouteName = path => {
   try {
-    return path.split(sep).reverse()[0];
+    return path.split(sep).reverse()[1];
   } catch (e) {
     return '';
   }
