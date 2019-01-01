@@ -1,6 +1,8 @@
 import $$ from 'cmn-utils';
 import { join } from 'path';
-import { writeJsonSync, readJsonSync, existsSync } from 'fs-extra';
+import { readFileSync, existsSync } from 'fs-extra';
+var acorn = require("acorn");
+var jsx = require("acorn-jsx");
 
 export default {
   namespace: 'route',
@@ -41,13 +43,13 @@ export default {
         'columns.js'
       );
       const columnsData = getColumnsData(columnAbsPath);
-      console.log(columnsData)
+      console.log(columnsData);
       yield put({
         type: 'changeStatus',
         payload: {
           columnsData
         }
-      })
+      });
     }
   },
 
@@ -63,8 +65,12 @@ export default {
 
 function getColumnsData(path) {
   if (existsSync(path)) {
-    const jsonData = readJsonSync(path);
-    return jsonData;
+    const file = readFileSync(path).toString();
+    const ast = acorn.Parser.extend(jsx()).parse(file, {
+      sourceType: 'module',
+    });
+    console.log(ast);
+    return [];
   }
   return [];
 }

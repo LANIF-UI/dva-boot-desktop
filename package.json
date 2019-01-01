@@ -20,6 +20,8 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "acorn": "^6.0.4",
+    "acorn-jsx": "^5.0.1",
     "antd": "^3.10.0",
     "classnames": "^2.2.5",
     "cmn-utils": "^1.0.7",
@@ -32,8 +34,7 @@
     "fs-extra": "^7.0.1",
     "object.omit": "^3.0.0",
     "react": "^16.5.0",
-    "react-dom": "^16.5.0",
-    "recast": "^0.16.1"
+    "react-dom": "^16.5.0"
   },
   "devDependencies": {
     "autodll-webpack-plugin": "^0.3.8",
