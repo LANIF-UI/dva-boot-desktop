@@ -3,6 +3,7 @@ import { join } from 'path';
 import { readFileSync, existsSync } from 'fs-extra';
 import * as acorn from 'acorn';
 import jsx from 'acorn-jsx';
+import * as walk from 'acorn-walk';
 
 export default {
   namespace: 'route',
@@ -68,9 +69,18 @@ function getColumnsData(path) {
     const file = readFileSync(path).toString();
     const ast = acorn.Parser.extend(jsx()).parse(file, {
       sourceType: 'module',
+      plugins: {
+        stage3: true,
+        jsx: true,
+      }
     });
     console.log(acorn)
     console.log(ast);
+    walk.simple(ast, {
+      Literal(node) {
+        console.log(`Found a literal: ${node.value}`)
+      }
+    })
     return [];
   }
   return [];
