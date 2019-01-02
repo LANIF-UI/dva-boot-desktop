@@ -1,8 +1,8 @@
 import $$ from 'cmn-utils';
 import { join } from 'path';
 import { readFileSync, existsSync } from 'fs-extra';
-var acorn = require("acorn");
-var jsx = require("acorn-jsx");
+import * as acorn from 'acorn';
+import jsx from 'acorn-jsx';
 
 export default {
   namespace: 'route',
@@ -69,6 +69,7 @@ function getColumnsData(path) {
     const ast = acorn.Parser.extend(jsx()).parse(file, {
       sourceType: 'module',
     });
+    console.log(acorn)
     console.log(ast);
     return [];
   }

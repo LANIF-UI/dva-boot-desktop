@@ -22,6 +22,7 @@
   "dependencies": {
     "acorn": "^6.0.4",
     "acorn-jsx": "^5.0.1",
+    "acorn-walk": "^6.1.1",
     "antd": "^3.10.0",
     "classnames": "^2.2.5",
     "cmn-utils": "^1.0.7",
