@@ -71,6 +71,8 @@ export default class extends BaseComponent {
             </Button>
           </div>
           <Table
+            size="small"
+            rowKey="name"
             dataSource={columnsData}
             columns={this.columns}
             pagination={false}

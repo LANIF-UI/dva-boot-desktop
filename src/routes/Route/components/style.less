@@ -4,16 +4,29 @@
     background: rgba(255, 255, 255, .8);
   }
   .ant-layout-content {
-    padding: 5px;
+    padding: 10px;
     .toolbar {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
     .ant-table {
       color: #fff;
-      background: rgba(33, 150, 243, 0.68);
+      background: rgba(0, 0, 0, 0.68);
+      .ant-table-thead > tr > th {
+        background: rgba(24, 144, 255, 0.6) !important;
+        color: #fff;
+      }
+      .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row) > td, 
+      .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row) > td, 
+      .ant-table-thead > tr:hover:not(.ant-table-expanded-row) > td, 
+      .ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
+        background: rgba(24, 144, 255, 0.2);
+      }
+      td a {
+        color: #eee;
+        &:hover {
+          color: #1890ff;
+        }
+      }
     }
-  }
-  .ant-table-thead > tr > th {
-    background: rgba(255, 255, 255, .6);
   }
 }
