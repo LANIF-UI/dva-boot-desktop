@@ -7,27 +7,30 @@ import BaseComponent from 'components/BaseComponent';
 import $$ from 'cmn-utils';
 const { Header, Content } = Layout;
 
-@connect(({ global }) => ({ global }))
+@connect(({ global, route }) => ({ global, route }))
 export default class extends BaseComponent {
-  state = {
-  };
+  state = {};
 
   columns = [
     {
       title: '列',
-      dataIndex: 'column'
+      dataIndex: 'name'
+    },
+    {
+      title: '名称',
+      dataIndex: 'title'
     },
     {
       title: '表格(tableItem)',
-      dataIndex: 'table'
+      dataIndex: 'tableItem'
     },
     {
       title: '搜索框(searchItem)',
-      dataIndex: 'search'
+      dataIndex: 'searchItem'
     },
     {
       title: '表单(formItem)',
-      dataIndex: 'form'
+      dataIndex: 'formItem'
     },
     {
       title: '操作',
@@ -43,6 +46,7 @@ export default class extends BaseComponent {
 
   render() {
     const { currentProject } = this.props.global;
+    const { columnsData } = this.props.route;
     const routes = currentProject ? currentProject.routes : [];
     const link = $$.getQueryValue('link');
     const route = routes.filter(item => item.link === link)[0];
@@ -67,8 +71,9 @@ export default class extends BaseComponent {
             </Button>
           </div>
           <Table
-            dataSource={[]}
+            dataSource={columnsData}
             columns={this.columns}
+            pagination={false}
           />
         </Content>
       </Layout>

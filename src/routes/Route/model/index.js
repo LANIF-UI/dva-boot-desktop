@@ -71,17 +71,35 @@ function getColumnsData(path) {
       sourceType: 'module',
       plugins: {
         stage3: true,
-        jsx: true,
+        jsx: true
       }
     });
-    console.log(acorn)
-    console.log(ast);
-    walk.simple(ast, {
-      Literal(node) {
-        console.log(`Found a literal: ${node.value}`)
-      }
-    })
-    return [];
+    // column table search form
+    const columnData = [];
+    try {
+      walk.simple(ast, {
+        ObjectExpression(node) {
+          const data = {};
+          if (node.properties.length) {
+            const properties = node.properties.filter(
+              item =>
+                item.key.name === 'title' ||
+                item.key.name === 'name' ||
+                item.key.name === 'tableItem' ||
+                item.key.name === 'searchItem' ||
+                item.key.name === 'formItem'
+            );
+            if (properties.length) {
+              properties.forEach(item => {
+                data[item.key.name] = item.value.value;
+              });
+              columnData.push(data);
+            }
+          }
+        }
+      });
+    } catch (e) {}
+    return columnData;
   }
   return [];
 }
