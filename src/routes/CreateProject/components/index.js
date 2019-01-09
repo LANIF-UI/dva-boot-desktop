@@ -70,11 +70,11 @@ class CreateProject extends Component {
     const { getFieldDecorator } = form;
     const { download, create, install, complete } = createProject;
     const formItemLayout = {
-      labelCol: { span: 8 },
+      labelCol: { span: 6 },
       wrapperCol: { span: 16 }
     };
     const tailFormItemLayout = {
-      wrapperCol: { span: 24, offset: 8 }
+      wrapperCol: { span: 24, offset: 6 }
     };
 
     return (

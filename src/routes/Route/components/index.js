@@ -26,8 +26,8 @@ export default class extends BaseComponent {
       align: 'center',
       render: (text, record) => {
         if (!text) return <Icon type="stop" />;
-        else if (!Object.keys(text).length) {
-          return <Icon type="check" />;
+        else if (typeof text === 'string') {
+          return text;
         } else {
           return <Icon type="check" />;
         }
@@ -39,8 +39,8 @@ export default class extends BaseComponent {
       align: 'center',
       render: (text, record) => {
         if (!text) return <Icon type="stop" />;
-        else if (!Object.keys(text).length) {
-          return <Icon type="check" />;
+        else if (typeof text === 'string') {
+          return text;
         } else {
           return <Icon type="check" />;
         }
@@ -52,8 +52,8 @@ export default class extends BaseComponent {
       align: 'center',
       render: (text, record) => {
         if (!text) return <Icon type="stop" />;
-        else if (!Object.keys(text).length) {
-          return <Icon type="check" />;
+        else if (typeof text === 'string') {
+          return text;
         } else {
           return <Icon type="check" />;
         }

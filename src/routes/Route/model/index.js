@@ -99,7 +99,8 @@ function getColumnsData(path) {
                   const objProperty = item.value.properties;
                   if (objProperty.length) {
                     // 如果有其它属性,如type等
-                    data[item.key.name] = objProperty;
+                    const types = objProperty.filter(prop => prop.key.name === 'type');
+                    data[item.key.name] = types.length ? types[0].value.value : {};
                   } else {
                     data[item.key.name] = {};
                   }
