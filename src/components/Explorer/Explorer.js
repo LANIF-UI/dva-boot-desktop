@@ -20,7 +20,7 @@ class Explorer extends BaseComponent {
         </span>
         <span className="action">
           <Button size="small" type="primary">
-            新增
+            <Link to="/createRoute">新增</Link>
           </Button>
         </span>
       </div>

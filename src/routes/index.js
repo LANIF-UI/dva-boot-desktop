@@ -6,6 +6,7 @@ import Login from './Login';
 import Home from './Home';
 import CreateProject from './CreateProject';
 import Route from './Route';
+import CreateRoute from './CreateRoute';
 
 const routesConfig = (app) => ([
   {
@@ -25,6 +26,7 @@ const routesConfig = (app) => ([
     childRoutes: [
       Home(app),
       CreateProject(app),
+      CreateRoute(app),
       Route(app),
       NotFound()
     ]
