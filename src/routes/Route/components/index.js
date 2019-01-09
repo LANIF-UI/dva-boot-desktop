@@ -22,15 +22,42 @@ export default class extends BaseComponent {
     },
     {
       title: '表格(tableItem)',
-      dataIndex: 'tableItem'
+      dataIndex: 'tableItem',
+      align: 'center',
+      render: (text, record) => {
+        if (!text) return <Icon type="stop" />;
+        else if (!Object.keys(text).length) {
+          return <Icon type="check" />;
+        } else {
+          return <Icon type="check" />;
+        }
+      }
     },
     {
       title: '搜索框(searchItem)',
-      dataIndex: 'searchItem'
+      dataIndex: 'searchItem',
+      align: 'center',
+      render: (text, record) => {
+        if (!text) return <Icon type="stop" />;
+        else if (!Object.keys(text).length) {
+          return <Icon type="check" />;
+        } else {
+          return <Icon type="check" />;
+        }
+      }
     },
     {
       title: '表单(formItem)',
-      dataIndex: 'formItem'
+      dataIndex: 'formItem',
+      align: 'center',
+      render: (text, record) => {
+        if (!text) return <Icon type="stop" />;
+        else if (!Object.keys(text).length) {
+          return <Icon type="check" />;
+        } else {
+          return <Icon type="check" />;
+        }
+      }
     },
     {
       title: '操作',

@@ -91,7 +91,21 @@ function getColumnsData(path) {
             );
             if (properties.length) {
               properties.forEach(item => {
-                data[item.key.name] = item.value.value;
+                if (item.value.type === 'Literal') {
+                  // 解析 title name 普通节点
+                  data[item.key.name] = item.value.value;
+                } else if (item.value.type === 'ObjectExpression') {
+                  // 解析 formItem tableItem 对像类型
+                  const objProperty = item.value.properties;
+                  if (objProperty.length) {
+                    // 如果有其它属性,如type等
+                    data[item.key.name] = objProperty;
+                  } else {
+                    data[item.key.name] = {};
+                  }
+                } else {
+                  // 不处理其它类型
+                }
               });
               columnData.push(data);
             }
