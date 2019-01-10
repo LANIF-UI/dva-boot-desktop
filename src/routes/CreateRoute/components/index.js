@@ -39,48 +39,45 @@ class CreateRoute extends Component {
     };
 
     return (
-      <Layout className="create-project">
+      <Layout className="create-route">
         <Header />
         <Content>
           <Form onSubmit={this.handleSubmit} className="create-form">
-            <Form.Item label="选择模板" {...formItemLayout}>
+            <Form.Item label="页面模板" {...formItemLayout}>
               {getFieldDecorator('template', {
                 rules: [{ required: true, message: '请选择模板' }],
-                initialValue: 'dva-boot-admin'
+                initialValue: 'blank'
               })(
                 <Select>
-                  <Option value="dva-boot-admin">DVA-BOOT-ADMIN(桌面端)</Option>
-                  <Option value="dva-boot-mobile">
-                    DVA-BOOT-MOBILE(移动端)
-                  </Option>
-                  <Option value="dva-boot">DVA-BOOT(基础工程)</Option>
+                  <Option value="blank">Blank(空白页)</Option>
+                  <Option value="dva-boot-mobile">CRUD(标准列表页)</Option>
                 </Select>
               )}
             </Form.Item>
-            <Form.Item label="项目名称" {...formItemLayout}>
+            <Form.Item label="页面标题" {...formItemLayout}>
               {getFieldDecorator('name', {
-                rules: [{ required: true, message: '请输入项目名称' }]
+                rules: [{ required: true, message: '请输入页面名称' }]
               })(
                 <Input
                   prefix={<Icon type="edit" />}
-                  placeholder="项目名称"
+                  placeholder="页面名称"
                   onChange={this.onChangeName}
                 />
               )}
             </Form.Item>
-            <Form.Item label="项目描述" {...formItemLayout}>
-              {getFieldDecorator('description')(
-                <Input prefix={<Icon type="tag" />} placeholder="项目描述" />
+            <Form.Item label="路由地址" {...formItemLayout}>
+              {getFieldDecorator('description', {
+                rules: [{ required: true, message: '请输入路由地址' }]
+              })(
+                <Input prefix={<Icon type="tag" />} placeholder="路由地址" />
               )}
             </Form.Item>
-            <Form.Item label="路径" {...formItemLayout}>
-              {getFieldDecorator('directoryPath', {
-                rules: [{ required: true, message: '请选择项目路径' }]
-              })(
+            <Form.Item label="命名空间" {...formItemLayout}>
+              {getFieldDecorator('directoryPath')(
                 <Input
                   readOnly
                   prefix={<Icon type="folder" />}
-                  placeholder="路径"
+                  placeholder="配置dva model的namespace"
                   onClick={this.onOpenDirectory}
                 />
               )}
@@ -88,11 +85,11 @@ class CreateRoute extends Component {
             <Form.Item {...tailFormItemLayout}>
               {getFieldDecorator('isBlank', {
                 valuePropName: 'checked'
-              })(<Checkbox>保留示例页面</Checkbox>)}
+              })(<Checkbox>是否按需加载</Checkbox>)}
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
               <Button icon="plus" type="primary" htmlType="submit">
-                创建
+                生成页面
               </Button>
               <Button
                 style={{ marginLeft: 5 }}
