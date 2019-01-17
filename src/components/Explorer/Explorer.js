@@ -5,7 +5,6 @@ import BaseComponent from 'components/BaseComponent';
 import './style/index.less';
 const { Header, Content } = Layout;
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 
 class Explorer extends BaseComponent {
   importProject = () => {};
@@ -19,9 +18,7 @@ class Explorer extends BaseComponent {
           <Icon type="link" /> 路由页
         </span>
         <span className="action">
-          <Button size="small" type="primary">
-            <Link to="/createRoute">新增</Link>
-          </Button>
+          <Link to="/createRoute">新增</Link>
         </span>
       </div>
     );
@@ -29,12 +26,10 @@ class Explorer extends BaseComponent {
     const MockTitle = (
       <div className="menu-mocks">
         <span>
-          <Icon type="interation" /> 模拟数据
+          <Icon type="swap" /> 模拟数据
         </span>
         <span className="action">
-          <Button size="small" type="primary">
-            新增
-          </Button>
+          <Link to="/">新增</Link>
         </span>
       </div>
     );
@@ -84,9 +79,9 @@ class Explorer extends BaseComponent {
                   </span>
                 }
               >
-                <MenuItemGroup title={PagesTitle}>
+                <SubMenu className="project-title" title={PagesTitle}>
                   {currentProject.routes.map((jtem, jndex) => (
-                    <Menu.Item key={jndex}>
+                    <Menu.Item key={'r_' + jndex}>
                       <Link to={'/route?link=' + jtem.link}>
                         {jtem.title}-
                         <strong style={{ color: '#c7254e' }}>
@@ -95,15 +90,15 @@ class Explorer extends BaseComponent {
                       </Link>
                     </Menu.Item>
                   ))}
-                </MenuItemGroup>
-                <MenuItemGroup title={MockTitle}>
+                </SubMenu>
+                <SubMenu className="project-title" title={MockTitle}>
                   {currentProject.mocks.map((jtem, jndex) => (
-                    <Menu.Item key={jndex}>{jtem.name}</Menu.Item>
+                    <Menu.Item key={'m_' + jndex}>{jtem.name}</Menu.Item>
                   ))}
-                </MenuItemGroup>
-                <MenuItemGroup title={ConfTitle}>
+                </SubMenu>
+                <SubMenu className="project-title" title={ConfTitle}>
                   <Menu.Item key="3">config.js</Menu.Item>
-                </MenuItemGroup>
+                </SubMenu>
               </SubMenu>
             </Menu>
           </Content>

@@ -44,7 +44,7 @@ export default {
         'columns.js'
       );
       const columnsData = getColumnsData(columnAbsPath);
-      console.log(columnsData);
+      
       yield put({
         type: 'changeStatus',
         payload: {

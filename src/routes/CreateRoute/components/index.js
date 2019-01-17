@@ -1,28 +1,61 @@
 import React, { Component } from 'react';
-import { Layout, Form, Input, Icon, Button, Checkbox, Select } from 'antd';
+import {
+  Layout,
+  Form,
+  Input,
+  Icon,
+  Button,
+  Checkbox,
+  Select,
+  Modal
+} from 'antd';
 import { connect } from 'dva';
 import './index.less';
 import { routerRedux } from 'dva/router';
+import { join } from 'path';
+import { existsSync } from 'fs-extra';
 
 const { Header, Content } = Layout;
 const createForm = Form.create;
 const Option = Select.Option;
 
-@connect(({ createRoute }) => ({ createRoute }))
+@connect(({ createRoute, global }) => ({
+  createRoute,
+  currentProject: global.currentProject
+}))
 class CreateRoute extends Component {
   state = {
     directory: null
   };
 
   handleSubmit = e => {
-    const { dispatch } = this.props;
+    const { dispatch, currentProject } = this.props;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        dispatch({
-          type: 'createRoute/newRoute',
-          payload: values
-        });
+        const target = join(
+          currentProject.directoryPath,
+          'src',
+          'routes',
+          values.name
+        );
+        if (existsSync(target)) {
+          Modal.confirm({
+            title: '提示',
+            content: '文件夹已存在，是否覆盖？',
+            onOk() {
+              dispatch({
+                type: 'createRoute/newRoute',
+                payload: values
+              });
+            }
+          });
+        } else {
+          dispatch({
+            type: 'createRoute/newRoute',
+            payload: values
+          });
+        }
       }
     });
   };
@@ -54,37 +87,45 @@ class CreateRoute extends Component {
                 </Select>
               )}
             </Form.Item>
-            <Form.Item label="页面标题" {...formItemLayout}>
+            <Form.Item label="页面Name" {...formItemLayout}>
               {getFieldDecorator('name', {
-                rules: [{ required: true, message: '请输入页面名称' }]
+                rules: [
+                  { required: true, message: '请输入页面名称' },
+                  { pattern: /^[a-zA-z]+$/, message: '文件名称请用英文' }
+                ]
               })(
                 <Input
                   prefix={<Icon type="edit" />}
-                  placeholder="页面名称"
+                  placeholder="创建文件夹及组件所用的名称，请用英文"
+                  onChange={this.onChangeName}
+                />
+              )}
+            </Form.Item>
+            <Form.Item label="页面Title" {...formItemLayout}>
+              {getFieldDecorator('title', {
+                rules: [{ required: true, message: '请输入页面Title' }]
+              })(
+                <Input
+                  prefix={<Icon type="edit" />}
+                  placeholder="设置<title />显示信息"
                   onChange={this.onChangeName}
                 />
               )}
             </Form.Item>
             <Form.Item label="路由地址" {...formItemLayout}>
-              {getFieldDecorator('description', {
+              {getFieldDecorator('route', {
                 rules: [{ required: true, message: '请输入路由地址' }]
-              })(
-                <Input prefix={<Icon type="tag" />} placeholder="路由地址" />
-              )}
+              })(<Input prefix={<Icon type="tag" />} placeholder="路由地址" />)}
             </Form.Item>
             <Form.Item label="命名空间" {...formItemLayout}>
-              {getFieldDecorator('directoryPath')(
-                <Input
-                  readOnly
-                  prefix={<Icon type="folder" />}
-                  placeholder="配置dva model的namespace"
-                  onClick={this.onOpenDirectory}
-                />
-              )}
+              {getFieldDecorator('namespace', {
+                rules: [{ required: true, message: '请输入命名空间' }]
+              })(<Input prefix={<Icon type="tag" />} placeholder="命名空间" />)}
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
-              {getFieldDecorator('isBlank', {
-                valuePropName: 'checked'
+              {getFieldDecorator('isAsync', {
+                valuePropName: 'checked',
+                initialValue: true
               })(<Checkbox>是否按需加载</Checkbox>)}
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
