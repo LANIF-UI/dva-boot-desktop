@@ -66,7 +66,7 @@ const getRoutes = directoryPath => {
   const routes = [];
 
   glob
-    .sync('**/routes/**/components', {
+    .sync('src/**/routes/**/components', {
       cwd: directoryPath,
       ignore: 'node_modules/**',
       dot: true

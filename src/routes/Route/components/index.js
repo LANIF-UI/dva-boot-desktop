@@ -2,81 +2,35 @@ import './style.less';
 import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Layout, Breadcrumb, Icon, Divider, Table, Alert, Button } from 'antd';
+import { Layout, Breadcrumb, Icon, Divider, Table, Modal, Button } from 'antd';
 import BaseComponent from 'components/BaseComponent';
 import $$ from 'cmn-utils';
+import colFun from './columns';
 const { Header, Content } = Layout;
 
 @connect(({ global, route }) => ({ global, route }))
 export default class extends BaseComponent {
   state = {};
 
-  columns = [
-    {
-      title: '列',
-      dataIndex: 'name'
-    },
-    {
-      title: '名称',
-      dataIndex: 'title'
-    },
-    {
-      title: '表格(tableItem)',
-      dataIndex: 'tableItem',
-      align: 'center',
-      render: (text, record) => {
-        if (!text) return <Icon type="stop" />;
-        else if (typeof text === 'string') {
-          return text;
-        } else {
-          return <Icon type="check" />;
-        }
+  onDeleteRoute = () => {
+    const { dispatch } = this.props;
+    Modal.confirm({
+      title: '警告',
+      content: '是否删除这个路由以及其文件夹？',
+      onOk() {
+        dispatch({
+          type: 'route/delete'
+        })
       }
-    },
-    {
-      title: '搜索框(searchItem)',
-      dataIndex: 'searchItem',
-      align: 'center',
-      render: (text, record) => {
-        if (!text) return <Icon type="stop" />;
-        else if (typeof text === 'string') {
-          return text;
-        } else {
-          return <Icon type="check" />;
-        }
-      }
-    },
-    {
-      title: '表单(formItem)',
-      dataIndex: 'formItem',
-      align: 'center',
-      render: (text, record) => {
-        if (!text) return <Icon type="stop" />;
-        else if (typeof text === 'string') {
-          return text;
-        } else {
-          return <Icon type="check" />;
-        }
-      }
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <span>
-          <a>修改</a>
-          <Divider type="vertical" />
-          <a>删除</a>
-        </span>
-      )
-    }
-  ];
+    });
+  };
 
   render() {
     const { currentProject } = this.props.global;
     const { columnsData } = this.props.route;
     const routes = currentProject ? currentProject.routes : [];
     const link = $$.getQueryValue('link');
-    const route = routes.filter(item => item.link === link)[0];
+    const route = routes.filter(item => item.link === link)[0] || {};
 
     return (
       <Layout className="route-page">
@@ -96,12 +50,20 @@ export default class extends BaseComponent {
             <Button onClick={this.onAddColumn} icon="plus">
               增加一项
             </Button>
+            <Button
+              onClick={this.onDeleteRoute}
+              className="delete-btn"
+              type="danger"
+              icon="delete"
+            >
+              删除这个路由
+            </Button>
           </div>
           <Table
             size="small"
             rowKey="name"
             dataSource={columnsData}
-            columns={this.columns}
+            columns={colFun()}
             pagination={false}
           />
         </Content>

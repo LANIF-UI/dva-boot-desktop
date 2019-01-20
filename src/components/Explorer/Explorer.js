@@ -15,7 +15,7 @@ class Explorer extends BaseComponent {
     const PagesTitle = (
       <div className="menu-pages">
         <span>
-          <Icon type="link" /> 路由页
+          <Icon type="link" /> 路由({currentProject.routes.length})
         </span>
         <span className="action">
           <Link to="/createRoute">新增</Link>

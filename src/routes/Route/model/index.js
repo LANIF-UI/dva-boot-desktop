@@ -1,15 +1,18 @@
 import $$ from 'cmn-utils';
 import { join } from 'path';
-import { readFileSync, existsSync } from 'fs-extra';
+import { readFileSync, existsSync, removeSync } from 'fs-extra';
+import { routerRedux } from 'dva/router';
 import * as acorn from 'acorn';
 import jsx from 'acorn-jsx';
 import * as walk from 'acorn-walk';
+import { message } from 'antd';
 
 export default {
   namespace: 'route',
 
   state: {
-    columnsData: []
+    columnsData: [],
+    deleted: false
   },
 
   subscriptions: {
@@ -36,21 +39,39 @@ export default {
       const { currentProject } = global;
       // 解析出column
       const route = currentProject.routes.filter(item => item.link === link)[0];
+      if (!route) return;
       const columnAbsPath = join(
         currentProject.directoryPath,
         route.path,
-        '../',
+        '..',
         'components',
         'columns.js'
       );
       const columnsData = getColumnsData(columnAbsPath);
-      
+
       yield put({
         type: 'changeStatus',
         payload: {
           columnsData
         }
       });
+    },
+    *delete({ payload }, { call, put, select }) {
+      const link = $$.getQueryValue('link');
+      const global = yield select(state => state.global);
+      const { currentProject } = global;
+      const route = currentProject.routes.filter(item => item.link === link)[0];
+      const routePath = join(currentProject.directoryPath, route.path, '..');
+      removeSync(routePath);
+
+      yield put({
+        type: 'global/setProjects',
+        payload: { projectInfo: currentProject }
+      });
+
+      yield put(routerRedux.push('/home'));
+
+      message.success('删除成功');
     }
   },
 
@@ -99,8 +120,12 @@ function getColumnsData(path) {
                   const objProperty = item.value.properties;
                   if (objProperty.length) {
                     // 如果有其它属性,如type等
-                    const types = objProperty.filter(prop => prop.key.name === 'type');
-                    data[item.key.name] = types.length ? types[0].value.value : {};
+                    const types = objProperty.filter(
+                      prop => prop.key.name === 'type'
+                    );
+                    data[item.key.name] = types.length
+                      ? types[0].value.value
+                      : {};
                   } else {
                     data[item.key.name] = {};
                   }

@@ -62,6 +62,7 @@ class CreateRoute extends Component {
 
   render() {
     const { createRoute, form, dispatch } = this.props;
+    const { loading } = createRoute;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -129,7 +130,7 @@ class CreateRoute extends Component {
               })(<Checkbox>是否按需加载</Checkbox>)}
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
-              <Button icon="plus" type="primary" htmlType="submit">
+              <Button icon="plus" type="primary" htmlType="submit" loading={loading}>
                 生成页面
               </Button>
               <Button
