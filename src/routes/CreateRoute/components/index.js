@@ -62,7 +62,7 @@ class CreateRoute extends Component {
 
   render() {
     const { createRoute, form, dispatch } = this.props;
-    const { loading } = createRoute;
+    const { loading, templates, parentRoutes } = createRoute;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -79,12 +79,27 @@ class CreateRoute extends Component {
           <Form onSubmit={this.handleSubmit} className="create-form">
             <Form.Item label="页面模板" {...formItemLayout}>
               {getFieldDecorator('template', {
-                rules: [{ required: true, message: '请选择模板' }],
-                initialValue: 'blank'
+                rules: [{ required: true, message: '请选择模板' }]
               })(
-                <Select>
-                  <Option value="blank">Blank(空白页)</Option>
-                  <Option value="dva-boot-mobile">CRUD(标准列表页)</Option>
+                <Select placeholder="请选择模板">
+                  {templates.map(item => (
+                    <Option key={item.name} value={item.path}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </Form.Item>
+            <Form.Item label="上级路由" {...formItemLayout}>
+              {getFieldDecorator('parent', {
+                rules: [{ required: true, message: '请选择上级路由' }]
+              })(
+                <Select placeholder="请选择上级路由">
+                  {parentRoutes.map(item => (
+                    <Option key={item.path} value={item.path}>
+                      {item.path}
+                    </Option>
+                  ))}
                 </Select>
               )}
             </Form.Item>
@@ -130,7 +145,12 @@ class CreateRoute extends Component {
               })(<Checkbox>是否按需加载</Checkbox>)}
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
-              <Button icon="plus" type="primary" htmlType="submit" loading={loading}>
+              <Button
+                icon="plus"
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+              >
                 生成页面
               </Button>
               <Button
