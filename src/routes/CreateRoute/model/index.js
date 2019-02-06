@@ -1,23 +1,36 @@
 import { join } from 'path';
-import { copySync, readdirSync, statSync, readFileSync } from 'fs-extra';
+import {
+  copySync,
+  readdirSync,
+  statSync,
+  readFileSync,
+  writeFileSync
+} from 'fs-extra';
+import { routerRedux } from 'dva/router';
 import { writeToFile } from 'utils/common';
 import { message } from 'antd';
 import * as acorn from 'acorn';
 import jsx from 'acorn-jsx';
 import * as walk from 'acorn-walk';
+import escodegen from 'escodegen';
 
+let comments = [];
+let tokens = [];
 export default {
   namespace: 'createRoute',
 
   state: {
     loading: false,
     templates: [],
-    parentRoutes: []
+    parentRoutes: [],
+    routeAST: null
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname }) => {
+        comments = []; // 清空
+        tokens = []; // 清空
         if (pathname === '/createRoute') {
           dispatch({
             type: 'getRouteTemplates'
@@ -43,6 +56,9 @@ export default {
       );
       const file = readFileSync(rootRoute).toString();
       const ast = acorn.Parser.extend(jsx()).parse(file, {
+        ranges: true,
+        onComment: comments,
+        onToken: tokens,
         sourceType: 'module',
         plugins: {
           stage3: true,
@@ -57,8 +73,9 @@ export default {
             const data = {};
             if (node.properties.length) {
               const properties = node.properties.filter(
-                item => item.key.name === 'path'
+                item => item.key.name === 'path' || item.key.name === 'title'
               );
+
               if (properties.length) {
                 properties.forEach(item => {
                   if (item.value.type === 'Literal') {
@@ -75,10 +92,13 @@ export default {
         yield put({
           type: 'changeStatus',
           payload: {
-            parentRoutes
+            parentRoutes,
+            routeAST: ast
           }
         });
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
     },
     *getRouteTemplates({ payload }, { call, put, select }) {
       const global = yield select(state => state.global);
@@ -108,8 +128,14 @@ export default {
       });
     },
     *newRoute({ payload }, { call, put, select }) {
-      const { name, title, namespace, route, template } = payload;
+      const {
+        name,
+        parent,
+        template,
+        isExist
+      } = payload;
       const global = yield select(state => state.global);
+      const createRoute = yield select(state => state.createRoute);
       const { currentProject } = global;
       const targetDirectory = join(
         currentProject.directoryPath,
@@ -139,7 +165,17 @@ export default {
       const modelFile = join(targetDirectory, 'model', 'index.js');
       writeToFile(modelFile, modelFile, payload);
       // 5.update routes config
-
+      if (!isExist) {
+        const routeAST = createRoute.routeAST;
+        const routeConfig = updateRouteConfig(name, parent, routeAST);
+        const routePath = join(
+          currentProject.directoryPath,
+          'src',
+          'routes',
+          'index.js'
+        );
+        writeFileSync(routePath, routeConfig);
+      }
       // 6.update project
       yield put({
         type: 'global/setProjects',
@@ -154,6 +190,8 @@ export default {
       });
 
       message.success('路由创建成功');
+
+      yield put(routerRedux.push('/home'));
     },
     *create() {}
   },
@@ -167,3 +205,60 @@ export default {
     }
   }
 };
+
+function updateRouteConfig(name, path, routeAST) {
+  try {
+    escodegen.attachComments(routeAST, comments, tokens);
+    walk.simple(routeAST, {
+      Program(node) {
+        const newImport = acorn.Parser.parse(
+          `import ${name} from './${name}';`,
+          {
+            sourceType: 'module'
+          }
+        );
+        for (let i = 0; i < node.body.length; i++) {
+          if (node.body[i].type === 'VariableDeclaration') {
+            node.body.splice(i, 0, newImport.body[0]);
+            break;
+          }
+        }
+      },
+      ObjectExpression(node) {
+        if (node.properties.length) {
+          const properties = node.properties.filter(
+            item => item.key.name === 'path' && item.value.value === path
+          );
+
+          if (properties.length) {
+            const childRoutesNodes = node.properties.filter(
+              item => item.key.name === 'childRoutes'
+            );
+            if (childRoutesNodes.length) {
+              // 如果有childRoutes
+              const childRoutes = childRoutesNodes[0];
+              // new route
+              const newRoute = acorn.Parser.parse(`${name}(app)`);
+              childRoutes.value.elements.unshift(newRoute.body[0].expression);
+            } else {
+              // 如果没有childRoutes
+            }
+          }
+        }
+      }
+    });
+  } catch (e) {
+    console.error(e);
+  }
+  return escodegen.generate(routeAST, {
+    format: {
+      indent: {
+        style: '  ',
+        base: 0,
+        adjustMultilineComment: true
+      },
+      semicolons: false
+    },
+    comment: true
+  });
+}

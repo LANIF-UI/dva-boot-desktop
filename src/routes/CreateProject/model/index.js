@@ -60,7 +60,6 @@ export default modelEnhance({
         name,
         version = '1.0.0',
         description,
-        baseURL = '/'
       } = projectInfo;
       // 复制文件
       copySync(projectPath, projectInfo.directoryPath);
@@ -68,8 +67,7 @@ export default modelEnhance({
       utils.writePackage(projectInfo.directoryPath, {
         name,
         version,
-        description,
-        baseURL
+        description
       });
       yield put({
         type: 'global/setProjects',

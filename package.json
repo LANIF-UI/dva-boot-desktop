@@ -31,6 +31,7 @@
     "dva-loading": "^2.0.5",
     "ejs": "^2.6.1",
     "electron-is": "^3.0.0",
+    "escodegen": "^1.11.0",
     "fetch-mock": "^6.4.3",
     "fix-path": "^2.1.0",
     "fs-extra": "^7.0.1",

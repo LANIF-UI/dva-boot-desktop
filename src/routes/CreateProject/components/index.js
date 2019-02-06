@@ -7,20 +7,25 @@ import {
   Tabs,
   Button,
   Checkbox,
-  Select
+  Select,
+  Modal
 } from 'antd';
 import { connect } from 'dva';
 import { openDirectory } from 'utils/common';
 import { join } from 'path';
 import './index.less';
-import { Link, routerRedux } from 'dva/router';
+import { routerRedux } from 'dva/router';
+import { existsSync } from 'fs-extra';
 
 const TabPane = Tabs.TabPane;
 const { Header, Content } = Layout;
 const createForm = Form.create;
 const Option = Select.Option;
 
-@connect(({ createProject }) => ({ createProject }))
+@connect(({ createProject, global }) => ({
+  createProject,
+  currentProject: global.currentProject
+}))
 class CreateProject extends Component {
   state = {
     directory: null
@@ -53,14 +58,29 @@ class CreateProject extends Component {
   };
 
   handleSubmit = e => {
-    const { dispatch } = this.props;
+    const { dispatch, currentProject } = this.props;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        dispatch({
-          type: 'createProject/newProject',
-          payload: values
-        });
+        const target = join(currentProject.directoryPath);
+        if (existsSync(target)) {
+          Modal.confirm({
+            title: '提示',
+            content: '工程已存在，是否覆盖？',
+            onOk() {
+              values.isExist = true;
+              dispatch({
+                type: 'createProject/newProject',
+                payload: values
+              });
+            }
+          });
+        } else {
+          dispatch({
+            type: 'createProject/newProject',
+            payload: values
+          });
+        }
       }
     });
   };
@@ -146,7 +166,7 @@ class CreateProject extends Component {
                     {download || create || install || complete || '创建'}
                   </Button>
                   <Button
-                    style={{marginLeft: 5}}
+                    style={{ marginLeft: 5 }}
                     icon="home"
                     onClick={e => dispatch(routerRedux.push('/home'))}
                   >

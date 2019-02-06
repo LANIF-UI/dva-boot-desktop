@@ -44,6 +44,7 @@ class CreateRoute extends Component {
             title: '提示',
             content: '文件夹已存在，是否覆盖？',
             onOk() {
+              values.isExist = true;
               dispatch({
                 type: 'createRoute/newRoute',
                 payload: values
@@ -92,18 +93,19 @@ class CreateRoute extends Component {
             </Form.Item>
             <Form.Item label="上级路由" {...formItemLayout}>
               {getFieldDecorator('parent', {
-                rules: [{ required: true, message: '请选择上级路由' }]
+                rules: [{ required: true, message: '请选择上级路由' }],
+                initialValue: '/'
               })(
                 <Select placeholder="请选择上级路由">
                   {parentRoutes.map(item => (
                     <Option key={item.path} value={item.path}>
-                      {item.path}
+                      {item.title || '空'} {item.path}
                     </Option>
                   ))}
                 </Select>
               )}
             </Form.Item>
-            <Form.Item label="页面Name" {...formItemLayout}>
+            <Form.Item label="路由名称" {...formItemLayout}>
               {getFieldDecorator('name', {
                 rules: [
                   { required: true, message: '请输入页面名称' },
