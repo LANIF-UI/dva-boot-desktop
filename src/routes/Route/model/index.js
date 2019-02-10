@@ -1,12 +1,15 @@
 import $$ from 'cmn-utils';
 import { join } from 'path';
-import { readFileSync, existsSync, removeSync } from 'fs-extra';
+import { readFileSync, existsSync, removeSync, writeFileSync } from 'fs-extra';
 import { routerRedux } from 'dva/router';
 import * as acorn from 'acorn';
 import jsx from 'acorn-jsx';
 import * as walk from 'acorn-walk';
 import { message } from 'antd';
+import escodegen from 'escodegen';
 
+let comments = [];
+let tokens = [];
 export default {
   namespace: 'route',
 
@@ -20,6 +23,8 @@ export default {
       return history.listen(({ pathname }) => {
         const link = $$.getQueryValue('link');
         if (pathname.indexOf('/route') !== -1 && link) {
+          comments = []; // 清空
+          tokens = []; // 清空
           dispatch({
             type: 'parseRoute',
             payload: {
@@ -57,12 +62,21 @@ export default {
       });
     },
     *delete({ payload }, { call, put, select }) {
-      const link = $$.getQueryValue('link');
+      const { route } = payload;
       const global = yield select(state => state.global);
       const { currentProject } = global;
-      const route = currentProject.routes.filter(item => item.link === link)[0];
+      // 1. delete file
       const routePath = join(currentProject.directoryPath, route.path, '..');
       removeSync(routePath);
+      // 2. update routes config
+      const rootRoutePath = join(
+        currentProject.directoryPath,
+        'src',
+        'routes',
+        'index.js'
+      );
+      const rootRouteConfig = updateRouteConfig(route, rootRoutePath);
+      writeFileSync(rootRoutePath, rootRouteConfig);
 
       yield put({
         type: 'global/setProjects',
@@ -142,4 +156,72 @@ function getColumnsData(path) {
     return columnData;
   }
   return [];
+}
+
+// 从总路由中删除指定路由
+function updateRouteConfig(route, rootRoutePath) {
+  const pathReg = /src\\routes(.*)\\index.js/;
+  const result = pathReg.exec(route.path);
+  let source = '';
+  if (result && result.length === 2) {
+    source = '.' + result[1].replace(/\\/g, '/')
+  }
+
+  const file = readFileSync(rootRoutePath).toString();
+  const ast = acorn.Parser.extend(jsx()).parse(file, {
+    ranges: true,
+    onComment: comments,
+    onToken: tokens,
+    sourceType: 'module',
+    plugins: {
+      stage3: true,
+      jsx: true
+    }
+  });
+  try {
+    escodegen.attachComments(ast, comments, tokens);
+    walk.simple(ast, {
+      Program(node) {
+        for (let i = 0; i < node.body.length; i++) {
+          if (node.body[i].type === 'ImportDeclaration' && node.body[i].source.value === source) {
+            node.body.splice(i, 1);
+            break;
+          }
+        }
+      },
+      ObjectExpression(node) {
+        if (node.properties.length) {
+          const childRoutesNodes = node.properties.filter(
+            item => item.key.name === 'childRoutes'
+          );
+          if (childRoutesNodes.length) {
+            // 如果有childRoutes
+            const childRoutes = childRoutesNodes[0];
+            const routes = childRoutes.value.elements;
+            for (let i = 0; i < routes.length; i++) {
+              if (routes[i].type === 'CallExpression' && routes[i].callee.name === route.name) {
+                routes.splice(i, 1);
+                break;
+              }
+            }
+          } else {
+            // 如果没有childRoutes
+          }
+        }
+      }
+    });
+  } catch (e) {
+    console.error(e);
+  }
+  return escodegen.generate(ast, {
+    format: {
+      indent: {
+        style: '  ',
+        base: 0,
+        adjustMultilineComment: true
+      },
+      semicolons: false
+    },
+    comment: true
+  });
 }

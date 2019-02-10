@@ -12,14 +12,17 @@ const { Header, Content } = Layout;
 export default class extends BaseComponent {
   state = {};
 
-  onDeleteRoute = () => {
+  onDeleteRoute = route => {
     const { dispatch } = this.props;
     Modal.confirm({
       title: '警告',
       content: '是否删除这个路由以及其文件夹？',
       onOk() {
         dispatch({
-          type: 'route/delete'
+          type: 'route/delete',
+          payload: {
+            route
+          }
         })
       }
     });
@@ -51,7 +54,7 @@ export default class extends BaseComponent {
               增加一项
             </Button>
             <Button
-              onClick={this.onDeleteRoute}
+              onClick={e => this.onDeleteRoute(route)}
               className="delete-btn"
               type="danger"
               icon="delete"

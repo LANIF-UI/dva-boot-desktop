@@ -139,6 +139,16 @@ class CreateProject extends Component {
                     />
                   )}
                 </Form.Item>
+                <Form.Item label="版本号" {...formItemLayout}>
+                  {getFieldDecorator('version', {
+                    initialValue: '1.0.0'
+                  })(
+                    <Input
+                      prefix={<Icon type="book" />}
+                      placeholder="版本号"
+                    />
+                  )}
+                </Form.Item>
                 <Form.Item label="路径" {...formItemLayout}>
                   {getFieldDecorator('directoryPath', {
                     rules: [{ required: true, message: '请选择项目路径' }]
@@ -152,9 +162,18 @@ class CreateProject extends Component {
                   )}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                  {getFieldDecorator('isBlank', {
-                    valuePropName: 'checked'
-                  })(<Checkbox>保留示例页面</Checkbox>)}
+                  {getFieldDecorator('removeExample', {
+                    valuePropName: 'checked',
+                    initialValue: true
+                  })(<Checkbox>删除示例页</Checkbox>)}
+                  {getFieldDecorator('removeDocs', {
+                    valuePropName: 'checked',
+                    initialValue: true
+                  })(<Checkbox>删除文档</Checkbox>)}
+                  {getFieldDecorator('removeMocks', {
+                    valuePropName: 'checked',
+                    initialValue: true
+                  })(<Checkbox>删除mock文件</Checkbox>)}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
                   <Button

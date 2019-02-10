@@ -18,7 +18,9 @@ class Explorer extends BaseComponent {
           <Icon type="link" /> 路由({currentProject.routes.length})
         </span>
         <span className="action">
-          <Link to="/createRoute">新增</Link>
+          <Link onClick={event => event.stopPropagation()} to="/createRoute">
+            新增
+          </Link>
         </span>
       </div>
     );
@@ -29,7 +31,9 @@ class Explorer extends BaseComponent {
           <Icon type="swap" /> 模拟数据
         </span>
         <span className="action">
-          <Link to="/">新增</Link>
+          <Link onClick={event => event.stopPropagation()} to="/">
+            新增
+          </Link>
         </span>
       </div>
     );
