@@ -7,10 +7,8 @@ const { Header, Content } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class Explorer extends BaseComponent {
-  importProject = () => {};
-
   render() {
-    const { currentProject } = this.props;
+    const { currentProject, importProject } = this.props;
 
     const PagesTitle = (
       <div className="menu-pages">
@@ -53,7 +51,7 @@ class Explorer extends BaseComponent {
           <div className="actions">
             <Icon
               title="导入"
-              onClick={this.importProject}
+              onClick={importProject}
               type="folder-open"
               theme="filled"
             />

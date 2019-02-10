@@ -22,9 +22,8 @@ const { Header, Content } = Layout;
 const createForm = Form.create;
 const Option = Select.Option;
 
-@connect(({ createProject, global }) => ({
-  createProject,
-  currentProject: global.currentProject
+@connect(({ createProject }) => ({
+  createProject
 }))
 class CreateProject extends Component {
   state = {
@@ -58,11 +57,11 @@ class CreateProject extends Component {
   };
 
   handleSubmit = e => {
-    const { dispatch, currentProject } = this.props;
+    const { dispatch } = this.props;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const target = join(currentProject.directoryPath);
+        const target = join(values.directoryPath);
         if (existsSync(target)) {
           Modal.confirm({
             title: '提示',
@@ -143,10 +142,7 @@ class CreateProject extends Component {
                   {getFieldDecorator('version', {
                     initialValue: '1.0.0'
                   })(
-                    <Input
-                      prefix={<Icon type="book" />}
-                      placeholder="版本号"
-                    />
+                    <Input prefix={<Icon type="book" />} placeholder="版本号" />
                   )}
                 </Form.Item>
                 <Form.Item label="路径" {...formItemLayout}>
