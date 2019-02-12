@@ -52,12 +52,12 @@ export default {
         'components',
         'columns.js'
       );
-      const columnsData = getColumnsData(columnAbsPath);
 
+      const columnsData = getColumnsData(columnAbsPath);
       yield put({
         type: 'changeStatus',
         payload: {
-          columnsData
+          columnsData: existsSync(columnAbsPath) ? columnsData : false
         }
       });
     },
@@ -164,7 +164,7 @@ function updateRouteConfig(route, rootRoutePath) {
   const result = pathReg.exec(route.path);
   let source = '';
   if (result && result.length === 2) {
-    source = '.' + result[1].replace(/\\/g, '/')
+    source = '.' + result[1].replace(/\\/g, '/');
   }
 
   const file = readFileSync(rootRoutePath).toString();
@@ -183,7 +183,10 @@ function updateRouteConfig(route, rootRoutePath) {
     walk.simple(ast, {
       Program(node) {
         for (let i = 0; i < node.body.length; i++) {
-          if (node.body[i].type === 'ImportDeclaration' && node.body[i].source.value === source) {
+          if (
+            node.body[i].type === 'ImportDeclaration' &&
+            node.body[i].source.value === source
+          ) {
             node.body.splice(i, 1);
             break;
           }
@@ -199,7 +202,10 @@ function updateRouteConfig(route, rootRoutePath) {
             const childRoutes = childRoutesNodes[0];
             const routes = childRoutes.value.elements;
             for (let i = 0; i < routes.length; i++) {
-              if (routes[i].type === 'CallExpression' && routes[i].callee.name === route.name) {
+              if (
+                routes[i].type === 'CallExpression' &&
+                routes[i].callee.name === route.name
+              ) {
                 routes.splice(i, 1);
                 break;
               }

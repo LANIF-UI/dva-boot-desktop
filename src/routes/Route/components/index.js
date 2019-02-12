@@ -2,7 +2,17 @@ import './style.less';
 import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Layout, Breadcrumb, Icon, Divider, Table, Modal, Button } from 'antd';
+import {
+  Layout,
+  Breadcrumb,
+  Icon,
+  Table,
+  Modal,
+  Button,
+  Row,
+  Col,
+  Empty
+} from 'antd';
 import BaseComponent from 'components/BaseComponent';
 import $$ from 'cmn-utils';
 import colFun from './columns';
@@ -23,7 +33,7 @@ export default class extends BaseComponent {
           payload: {
             route
           }
-        })
+        });
       }
     });
   };
@@ -50,8 +60,12 @@ export default class extends BaseComponent {
         </Header>
         <Content>
           <div className="toolbar">
-            <Button onClick={this.onAddColumn} icon="plus">
-              增加一项
+            <Button
+              disabled={!columnsData}
+              onClick={this.onAddColumn}
+              icon="plus"
+            >
+              增加一列
             </Button>
             <Button
               onClick={e => this.onDeleteRoute(route)}
@@ -62,13 +76,28 @@ export default class extends BaseComponent {
               删除这个路由
             </Button>
           </div>
-          <Table
-            size="small"
-            rowKey="name"
-            dataSource={columnsData}
-            columns={colFun()}
-            pagination={false}
-          />
+          <Row>
+            <Col>
+              {columnsData ? (
+                <Table
+                  size="small"
+                  rowKey="name"
+                  dataSource={columnsData}
+                  columns={colFun()}
+                  pagination={false}
+                />
+              ) : (
+                <div className="blank-panel">
+                  <Empty
+                    image={<Icon type="dropbox" />}
+                    description={<span>没有发现 columns.js</span>}
+                  >
+                    <Button type="primary">现在创建</Button>
+                  </Empty>
+                </div>
+              )}
+            </Col>
+          </Row>
         </Content>
       </Layout>
     );

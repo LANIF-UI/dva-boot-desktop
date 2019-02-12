@@ -1,6 +1,4 @@
-import { routerRedux } from 'dva/router';
 import { remote } from 'electron';
-import $$ from 'cmn-utils';
 
 export default {
   namespace: 'login',

@@ -14,16 +14,12 @@ export function openDirectory() {
 }
 
 export const writeToFile = (source, target, data) => {
+  const tpl = readFileSync(source);
+  let content;
   try {
-    const tpl = readFileSync(source);
-    let content;
-    try {
-      content = render(tpl.toString(), data);
-    } catch (e) {
-      content = tpl;
-    }
-    writeFileSync(target, content);
+    content = render(tpl.toString(), data);
   } catch (e) {
-    console.error(e);
+    content = tpl;
   }
+  writeFileSync(target, content);
 };

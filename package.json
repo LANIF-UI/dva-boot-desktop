@@ -23,7 +23,7 @@
     "acorn": "^6.0.4",
     "acorn-jsx": "^5.0.1",
     "acorn-walk": "^6.1.1",
-    "antd": "^3.10.0",
+    "antd": "^3.13.2",
     "classnames": "^2.2.5",
     "cmn-utils": "^1.0.7",
     "download": "^7.1.0",

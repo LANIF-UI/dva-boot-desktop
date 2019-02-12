@@ -1,7 +1,7 @@
 import modelEnhance from '@/utils/modelEnhance';
 import glob from 'glob';
 import { remote } from 'electron';
-import { readFileSync, existsSync } from 'fs-extra';
+import { readFileSync, readdirSync } from 'fs-extra';
 import { join, sep } from 'path';
 const config = remote.getGlobal('config');
 
@@ -93,22 +93,17 @@ const getRoutes = directoryPath => {
 const getMocks = directoryPath => {
   const mocks = [];
 
-  glob
-    .sync('src/__mocks__/*', {
-      cwd: directoryPath,
-      nodir: true,
-      ignore: 'index.js'
-    })
-    .forEach(source => {
+  const mockPath = join(directoryPath, 'src', '__mocks__');
+  const files = readdirSync(mockPath);
+  files
+    .filter(item => item !== 'index.js')
+    .forEach((item, index) => {
       mocks.push({
-        name: source
-          .split('/')
-          .pop()
-          .split('.')
-          .shift(),
-        path: source
+        name: item,
+        path: join(mockPath, item)
       });
     });
+
   return mocks;
 };
 

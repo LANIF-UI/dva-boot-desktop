@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'dva/router';
-import { Layout, Icon, Menu, Button } from 'antd';
+import { Layout, Icon, Menu } from 'antd';
 import BaseComponent from 'components/BaseComponent';
 import './style/index.less';
 const { Header, Content } = Layout;
@@ -13,7 +13,8 @@ class Explorer extends BaseComponent {
     const PagesTitle = (
       <div className="menu-pages">
         <span>
-          <Icon type="link" /> 路由({currentProject.routes.length})
+          <Icon type="link" /> 路由(
+          {currentProject && currentProject.routes.length})
         </span>
         <span className="action">
           <Link onClick={event => event.stopPropagation()} to="/createRoute">

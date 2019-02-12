@@ -143,7 +143,6 @@ export default modelEnhance({
         type: 'global/setProjects',
         payload: { projectInfo }
       });
-      return;
       // 文件复制成功后，开始安装依赖
       yield put({
         type: 'install',
