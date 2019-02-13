@@ -11,7 +11,8 @@ import {
   Button,
   Row,
   Col,
-  Empty
+  Empty,
+  message
 } from 'antd';
 import BaseComponent from 'components/BaseComponent';
 import $$ from 'cmn-utils';
@@ -34,6 +35,19 @@ export default class extends BaseComponent {
             route
           }
         });
+      }
+    });
+  };
+
+  onCreateColumns = route => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'route/createColumns',
+      payload: {
+        route
+      },
+      success() {
+        message.success('创建成功');
       }
     });
   };
@@ -92,7 +106,12 @@ export default class extends BaseComponent {
                     image={<Icon type="dropbox" />}
                     description={<span>没有发现 columns.js</span>}
                   >
-                    <Button type="primary">现在创建</Button>
+                    <Button
+                      type="primary"
+                      onClick={e => this.onCreateColumns(route)}
+                    >
+                      现在创建
+                    </Button>
                   </Empty>
                 </div>
               )}

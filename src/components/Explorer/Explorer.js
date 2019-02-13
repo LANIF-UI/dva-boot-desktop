@@ -30,7 +30,7 @@ class Explorer extends BaseComponent {
           <Icon type="swap" /> 模拟数据
         </span>
         <span className="action">
-          <Link onClick={event => event.stopPropagation()} to="/">
+          <Link onClick={event => event.stopPropagation()} to="/createMocks">
             新增
           </Link>
         </span>
@@ -87,7 +87,7 @@ class Explorer extends BaseComponent {
                     <Menu.Item key={'r_' + jndex}>
                       <Link to={'/route?link=' + jtem.link}>
                         {jtem.title}-
-                        <strong style={{ color: '#c7254e' }}>
+                        <strong style={{ color: '#FFF' }}>
                           {jtem.name}
                         </strong>
                       </Link>

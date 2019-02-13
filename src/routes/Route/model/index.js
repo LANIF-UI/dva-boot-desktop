@@ -61,6 +61,7 @@ export default {
         }
       });
     },
+    // 删除路由
     *delete({ payload }, { call, put, select }) {
       const { route } = payload;
       const global = yield select(state => state.global);
@@ -86,6 +87,38 @@ export default {
       yield put(routerRedux.push('/home'));
 
       message.success('删除成功');
+    },
+    // create columns.js
+    *createColumns({ payload, success }, { call, put, select }) {
+      const { route } = payload;
+      const global = yield select(state => state.global);
+      const { currentProject } = global;
+      // 1. create columns template
+      const template = `
+import React from 'react';
+import DataTable from 'components/DataTable';
+import Icon from 'components/Icon';
+import Button from 'components/Button';
+
+export default (self) => [];      
+      `;
+      // 2. write to file
+      const columnsPath = join(
+        currentProject.directoryPath,
+        route.path,
+        '..',
+        'components',
+        'columns.js'
+      );
+      writeFileSync(columnsPath, template);
+      const columnsData = getColumnsData(columnsPath);
+      yield put({
+        type: 'changeStatus',
+        payload: {
+          columnsData: columnsData
+        }
+      });
+      success();
     }
   },
 
