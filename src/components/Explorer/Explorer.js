@@ -1,14 +1,45 @@
 import React from 'react';
 import { Link } from 'dva/router';
-import { Layout, Icon, Menu } from 'antd';
+import { Layout, Icon, Menu, Modal, Input } from 'antd';
 import BaseComponent from 'components/BaseComponent';
+import { existsSync, writeFileSync } from 'fs-extra';
+import { join } from 'path';
 import './style/index.less';
 const { Header, Content } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class Explorer extends BaseComponent {
+  state = {
+    mocksVisible: false,
+    mockName: null
+  };
+
+  createMocks = e => {
+    e.stopPropagation();
+    this.setState({
+      mocksVisible: true
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      mocksVisible: false,
+      mockName: null
+    });
+  };
+
+  onChangeMockName = e => {
+    this.setState({
+      mockName: e.target.value
+    });
+  };
+  // 创建mock文件
+  handleCreateMocks = () => {
+  };
+
   render() {
     const { currentProject, importProject } = this.props;
+    const { mocksVisible, mockName } = this.state;
 
     const PagesTitle = (
       <div className="menu-pages">
@@ -30,9 +61,7 @@ class Explorer extends BaseComponent {
           <Icon type="swap" /> 模拟数据
         </span>
         <span className="action">
-          <Link onClick={event => event.stopPropagation()} to="/createMocks">
-            新增
-          </Link>
+          <a onClick={this.createMocks}>新增</a>
         </span>
       </div>
     );
@@ -87,9 +116,7 @@ class Explorer extends BaseComponent {
                     <Menu.Item key={'r_' + jndex}>
                       <Link to={'/route?link=' + jtem.link}>
                         {jtem.title}-
-                        <strong style={{ color: '#FFF' }}>
-                          {jtem.name}
-                        </strong>
+                        <strong style={{ color: '#FFF' }}>{jtem.name}</strong>
                       </Link>
                     </Menu.Item>
                   ))}
@@ -106,6 +133,20 @@ class Explorer extends BaseComponent {
             </Menu>
           </Content>
         ) : null}
+        <Modal
+          title="新建"
+          visible={mocksVisible}
+          onOk={this.handleCreateMocks}
+          onCancel={this.handleCancel}
+          okButtonProps={{ disabled: !mockName }}
+        >
+          <Input
+            addonBefore="文件名"
+            placeholder="在__mocks__下,创建模拟接口文件,文件名符合规范"
+            addonAfter=".js"
+            onChange={this.onChangeMockName}
+          />
+        </Modal>
       </Layout>
     );
   }

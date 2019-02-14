@@ -7,7 +7,7 @@ import Home from './Home';
 import CreateProject from './CreateProject';
 import Route from './Route';
 import CreateRoute from './CreateRoute';
-import CreateMocks from './CreateMocks';
+import Mocks from './Mocks';
 
 const routesConfig = (app) => ([
   {
@@ -26,7 +26,7 @@ const routesConfig = (app) => ([
     indexRoute: '/home',
     childRoutes: [
       Home(app),
-      CreateMocks(app),
+      Mocks(app),
       CreateProject(app),
       CreateRoute(app),
       Route(app),
