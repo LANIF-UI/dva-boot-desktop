@@ -1,7 +1,8 @@
 import modelEnhance from '@/utils/modelEnhance';
 import glob from 'glob';
 import { remote } from 'electron';
-import { readFileSync, readdirSync } from 'fs-extra';
+import { message } from 'antd';
+import { readFileSync, readdirSync, existsSync, writeFileSync } from 'fs-extra';
 import { join, sep } from 'path';
 const config = remote.getGlobal('config');
 
@@ -27,7 +28,42 @@ export default modelEnhance({
       : null
   },
 
-  effects: {},
+  effects: {
+    *createMocks({ payload, success }, { put, select }) {
+      const { name } = payload;
+      const global = yield select(state => state.global);
+      const { currentProject } = global;
+      const mocksFile = join(
+        currentProject.directoryPath,
+        'src',
+        '__mocks__',
+        name
+      );
+      const mocksTemplate = `
+/**
+ * ${name}
+ */
+export default ({ fetchMock, delay, mock, toSuccess, toError }) => {
+  return {
+
+  };
+};
+      `;
+      if (existsSync(mocksFile)) {
+        message.error(`${name}.js 文件已经存在`);
+      } else {
+        // 1.新建文件
+        writeFileSync(mocksFile, mocksTemplate);
+        message.success('创建文件成功');
+        // 2.更新工程
+        yield put({
+          type: 'global/setProjects',
+          payload: { projectInfo: currentProject }
+        });
+        success();
+      }
+    }
+  },
 
   reducers: {
     setProjects(state, { payload }) {

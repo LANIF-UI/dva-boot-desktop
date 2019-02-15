@@ -34,7 +34,7 @@ export default class BasicLayout extends React.PureComponent {
   };
 
   render() {
-    const { global, routerData } = this.props;
+    const { global, routerData, dispatch } = this.props;
     const { projects, currentProject } = global;
     const { childRoutes } = routerData;
 
@@ -46,6 +46,7 @@ export default class BasicLayout extends React.PureComponent {
               projects={projects}
               currentProject={currentProject}
               importProject={this.importProject}
+              dispatch={dispatch}
             />
           </Sider>
           <Layout>

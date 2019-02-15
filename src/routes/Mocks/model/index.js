@@ -6,38 +6,13 @@ import { message } from 'antd';
 export default modelEnhance({
   namespace: 'mocks',
 
-  state: {},
+  state: {
+    columnsData: [],
+  },
 
   subscriptions: {},
 
-  effects: {
-    *createMocks({ payload, success }, { put, select }) {
-      const { name, description } = payload;
-      const global = yield select(state => state.global);
-      const { currentProject } = global;
-      const mocksFile = join(
-        currentProject.directoryPath,
-        'src',
-        '__mocks__',
-        name
-      );
-      const mocksTemplate = `
-/**
- * ${description}
- */
-export default ({ fetchMock, delay, mock, toSuccess, toError }) => {
-  return {
-
-  };
-};
-      `;
-      if (existsSync(mocksFile)) {
-        message('文件已经存在:' + name);
-      } else {
-        writeFileSync(mocksFile, mocksTemplate);
-      }
-    }
-  },
+  effects: {},
 
   reducers: {}
 });

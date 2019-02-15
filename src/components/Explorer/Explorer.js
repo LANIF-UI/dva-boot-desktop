@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'dva/router';
 import { Layout, Icon, Menu, Modal, Input } from 'antd';
 import BaseComponent from 'components/BaseComponent';
-import { existsSync, writeFileSync } from 'fs-extra';
-import { join } from 'path';
 import './style/index.less';
 const { Header, Content } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -34,7 +32,26 @@ class Explorer extends BaseComponent {
     });
   };
   // 创建mock文件
-  handleCreateMocks = () => {
+  handleCreateMocks = e => {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    const { mockName } = this.state;
+    if (!mockName || !mockName.trim()) return;
+    dispatch({
+      type: 'global/createMocks',
+      payload: {
+        name: mockName
+          .trim()
+          .split('.js')
+          .filter(Boolean)
+          .concat('.js')
+          .join('')
+      },
+      success: () => {
+        this.handleCancel();
+        this.history.push('/mocks');
+      }
+    });
   };
 
   render() {
@@ -123,7 +140,9 @@ class Explorer extends BaseComponent {
                 </SubMenu>
                 <SubMenu className="project-title" title={MockTitle}>
                   {currentProject.mocks.map((jtem, jndex) => (
-                    <Menu.Item key={'m_' + jndex}>{jtem.name}</Menu.Item>
+                    <Menu.Item key={'m_' + jndex}>
+                      <Link to={'/mocks?name=' + jtem.name}>{jtem.name}</Link>
+                    </Menu.Item>
                   ))}
                 </SubMenu>
                 <SubMenu className="project-title" title={ConfTitle}>
@@ -140,12 +159,14 @@ class Explorer extends BaseComponent {
           onCancel={this.handleCancel}
           okButtonProps={{ disabled: !mockName }}
         >
-          <Input
-            addonBefore="文件名"
-            placeholder="在__mocks__下,创建模拟接口文件,文件名符合规范"
-            addonAfter=".js"
-            onChange={this.onChangeMockName}
-          />
+          <form onSubmit={this.handleCreateMocks}>
+            <Input
+              addonBefore="文件名"
+              placeholder="在__mocks__下,创建模拟接口文件,文件名符合规范"
+              addonAfter=".js"
+              onChange={this.onChangeMockName}
+            />
+          </form>
         </Modal>
       </Layout>
     );
