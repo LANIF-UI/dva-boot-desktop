@@ -8,6 +8,9 @@ import {
   Icon,
   Table,
   Button,
+  Row,
+  Col,
+  Card
 } from 'antd';
 import BaseComponent from 'components/BaseComponent';
 import $$ from 'cmn-utils';
@@ -41,42 +44,92 @@ export default class extends BaseComponent {
           </Header>
           <Content>
             <div className="toolbar">
-              <Button
-                disabled={!columnsData}
-                onClick={this.onAddColumn}
-                icon="plus"
-              >
-                增加一列
-              </Button>
-              <Button
-                onClick={e => this.onDeleteRoute(mock)}
-                className="delete-btn"
-                type="danger"
-                icon="delete"
-              >
-                删除这个文件
-              </Button>
+              <Button.Group className="delete-btn">
+                <Button
+                  size="small"
+                  onClick={e => this.onDeleteRoute(mock)}
+                  icon="disconnect"
+                >
+                  停用
+                </Button>
+                <Button
+                  size="small"
+                  onClick={e => this.onDeleteRoute(mock)}
+                  type="danger"
+                  icon="delete"
+                >
+                  删除
+                </Button>
+              </Button.Group>
             </div>
             <Table
+              className="transfer-table"
               size="small"
               rowKey="name"
               dataSource={columnsData}
               columns={colFun()}
               pagination={false}
             />
+            <Row className="toolbar">
+              <Col>
+                <Button
+                  type="primary"
+                  shape="round"
+                  size="small"
+                  onClick={this.onAddColumn}
+                  icon="thunderbolt"
+                >
+                  MOCK
+                </Button>
+              </Col>
+            </Row>
+            <Row gutter={10}>
+              <Col span={12}>
+                <Card className="transfer-card" size="small" title="响应模板">
+                  <p>Card content</p>
+                  <p>Card content</p>
+                  <p>Card content</p>
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card
+                  className="transfer-card"
+                  size="small"
+                  title="响应数据"
+                  extra={
+                    <a>
+                      <Icon type="sync" />
+                    </a>
+                  }
+                >
+                  <p>Card content</p>
+                  <p>Card content</p>
+                  <p>Card content</p>
+                </Card>
+              </Col>
+            </Row>
           </Content>
         </Layout>
-        <Sider theme="light">
+        <Sider theme="light" className="transfer-sider">
           <List
             header={
-              <div>
-                接口列表<a>新增</a>
+              <div className="list-outline">
+                <Icon type="bars" /> 接口列表
               </div>
             }
             size="small"
-            bordered
             dataSource={data}
-            renderItem={item => <List.Item>{item}</List.Item>}
+            renderItem={item => (
+              <List.Item>
+                <Icon className="api-icon" type="link" /> {item}
+              </List.Item>
+            )}
+          />
+          <Button
+            className="add-btn"
+            type="primary"
+            shape="circle"
+            icon="plus"
           />
         </Sider>
       </Layout>

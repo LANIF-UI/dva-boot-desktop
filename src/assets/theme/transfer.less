@@ -1,0 +1,103 @@
+.transfer-table .ant-table {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  margin-bottom: 10px;
+  .ant-table-thead > tr > th {
+    background: rgba(24, 144, 255, 0.2) !important;
+    color: #fff;
+  }
+  .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row) > td,
+  .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row) > td,
+  .ant-table-thead > tr:hover:not(.ant-table-expanded-row) > td,
+  .ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
+    background: rgba(24, 144, 255, 0.2);
+  }
+  .ant-table-placeholder {
+    background: transparent;
+    color: #fff;
+  }
+  td a {
+    color: #aaa;
+    &:hover {
+      color: #1890ff;
+    }
+  }
+}
+
+.ant-card.transfer-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #ddd;
+  .ant-card-head {
+    color: #eee;
+    background: rgba(24, 144, 255, 0.2);
+    border-bottom: 1px solid #ddd;
+  }
+  .ant-card-body {
+    color: #eee;
+    padding: 15px;
+  }
+  .ant-card-extra {
+    a {
+      color: #ddd;
+      vertical-align: middle;
+      &:hover {
+        color: #fff;
+      }
+      &:active {
+        color: #ddd;
+      }
+    }
+  }
+}
+
+.ant-layout-sider.transfer-sider {
+  border-left: 1px solid #e8e8e8;
+  background: rgba(0, 0, 0, 0.15);
+  .ant-list-header {
+    padding: 7px 15px;
+    background: rgba(24, 144, 255, 0.2);
+    color: #fff;
+  }
+  .add-btn {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    box-shadow: 0 0 0 2px #ddd;
+  }
+  .list-outline {
+    display: flex;
+    align-items: center;
+    i {
+      font-size: 16px;
+      margin-right: 7px;
+    }
+    a {
+      color: #eee;
+      float: right;
+      &:hover {
+        color: #fff;
+      }
+      &:active {
+        color: #eee;
+      }
+    }
+  }
+  .ant-list-item {
+    background: rgba(0, 0, 0, 0.3);
+    color: #eee;
+    padding-left: 15px;
+    .ant-list-item-content {
+      display: flex;
+      align-items: center;
+    }
+    .api-icon {
+      font-size: 16px;
+      margin-right: 7px;
+    }
+    cursor: pointer;
+    &:hover {
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+    }
+  }
+}

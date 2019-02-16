@@ -94,6 +94,7 @@ export default class extends BaseComponent {
             <Col>
               {columnsData ? (
                 <Table
+                  className="transfer-table"
                   size="small"
                   rowKey="name"
                   dataSource={columnsData}

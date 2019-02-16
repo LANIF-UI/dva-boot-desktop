@@ -22,7 +22,11 @@ export default class Home extends BaseComponent {
         <Content>
           <Row>
             <Col xs={12} md={8} xl={6}>
-              <Card title={`路由页 (${routes.length})`} extra={<a>新增</a>}>
+              <Card
+                className="transfer-card"
+                title={`路由页 (${routes.length})`}
+                extra={<a>新增</a>}
+              >
                 <div className="router-card-body">
                   {routes.map((item, index) => (
                     <Tag
@@ -38,7 +42,11 @@ export default class Home extends BaseComponent {
               </Card>
             </Col>
             <Col xs={12} md={8} xl={6}>
-              <Card title={`模拟数据 (${mocks.length})`} extra={<a>新增</a>}>
+              <Card
+                className="transfer-card"
+                title={`模拟数据 (${mocks.length})`}
+                extra={<a>新增</a>}
+              >
                 <div className="router-card-body">
                   {mocks.map((item, index) => (
                     <Tag key={index} color="green">
@@ -50,12 +58,20 @@ export default class Home extends BaseComponent {
               </Card>
             </Col>
             <Col xs={12} md={8} xl={6}>
-              <Card title="代理配置" extra={<a>设置</a>}>
+              <Card
+                className="transfer-card"
+                title="代理配置"
+                extra={<a>设置</a>}
+              >
                 无
               </Card>
             </Col>
             <Col xs={12} md={8} xl={6}>
-              <Card title="系统配置" extra={<a>设置</a>}>
+              <Card
+                className="transfer-card"
+                title="系统配置"
+                extra={<a>设置</a>}
+              >
                 无
               </Card>
             </Col>

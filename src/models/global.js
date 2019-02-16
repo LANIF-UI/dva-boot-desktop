@@ -57,7 +57,7 @@ export default ({ fetchMock, delay, mock, toSuccess, toError }) => {
         message.success('创建文件成功');
         // 2.更新工程
         yield put({
-          type: 'global/setProjects',
+          type: 'setProjects',
           payload: { projectInfo: currentProject }
         });
         success();
