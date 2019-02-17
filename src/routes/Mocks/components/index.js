@@ -10,7 +10,8 @@ import {
   Button,
   Row,
   Col,
-  Card
+  Card,
+  Tag
 } from 'antd';
 import BaseComponent from 'components/BaseComponent';
 import $$ from 'cmn-utils';
@@ -61,6 +62,7 @@ export default class extends BaseComponent {
                   删除
                 </Button>
               </Button.Group>
+              <Tag className="fr" color="blue">接口地址：/api/user/add</Tag>
             </div>
             <Table
               className="transfer-table"
