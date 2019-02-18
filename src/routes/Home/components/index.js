@@ -1,16 +1,13 @@
 import './style.less';
 import React from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import { Layout, Row, Col, Card, Tag } from 'antd';
 import BaseComponent from 'components/BaseComponent';
 const { Content } = Layout;
 
 @connect(({ global }) => ({ global }))
 export default class Home extends BaseComponent {
-  enterRoute(item) {
-    this.history.push('/route?link=' + item.link);
-  }
-
   render() {
     const { currentProject } = this.props.global;
 
@@ -29,13 +26,9 @@ export default class Home extends BaseComponent {
               >
                 <div className="router-card-body">
                   {routes.map((item, index) => (
-                    <Tag
-                      key={index}
-                      color="red"
-                      onClick={e => this.enterRoute(item)}
-                    >
-                      {item.title}
-                    </Tag>
+                    <Link key={index} to={'/route?link=' + item.link}>
+                      <Tag color="red">{item.title}</Tag>
+                    </Link>
                   ))}
                 </div>
                 {!routes.length && '无'}
@@ -49,9 +42,9 @@ export default class Home extends BaseComponent {
               >
                 <div className="router-card-body">
                   {mocks.map((item, index) => (
-                    <Tag key={index} color="green">
-                      {item.name}
-                    </Tag>
+                    <Link key={index} to={'/mocks?name=' + item.name}>
+                      <Tag color="green">{item.name}</Tag>
+                    </Link>
                   ))}
                 </div>
                 {!mocks.length && '无'}
