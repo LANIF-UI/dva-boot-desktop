@@ -1,6 +1,3 @@
-import React from 'react';
-import { Icon, Divider } from 'antd';
-
 export default (self) => [
   {
     title: '名称',

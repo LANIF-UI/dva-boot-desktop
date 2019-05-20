@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Switch } from 'dva/router';
+import { Switch, routerRedux } from 'dva/router';
 import { Layout, Icon, message } from 'antd';
 import Explorer from 'components/Explorer';
 import Toolbar from 'components/Toolbar';
-import { openDirectory } from 'utils/common';
+import { openDirectory, isNormalProject } from 'utils/common';
 import { join } from 'path';
 import { existsSync, readJsonSync } from 'fs-extra';
 import './styles/basic.less';
 import { version } from 'package';
+import $$ from 'cmn-utils';
 const { Header, Content, Footer, Sider } = Layout;
 
 @connect(({ global }) => ({ global }))
@@ -32,6 +33,22 @@ export default class BasicLayout extends React.PureComponent {
       }
     }
   };
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    const { currentProject } = this.props.global;
+
+    if ($$.isObject(currentProject)) {
+      const isNormal = isNormalProject(currentProject.directoryPath);
+      if (!isNormal) {
+        this.props.dispatch({
+          type: 'global/removeProject',
+          payload: { projectInfo: currentProject }
+        });
+        dispatch(routerRedux.replace("/user/login"));
+      }
+    }
+  }
 
   render() {
     const { global, routerData, dispatch } = this.props;

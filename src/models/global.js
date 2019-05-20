@@ -94,6 +94,24 @@ export default ({ fetchMock, delay, mock, toSuccess, toError }) => {
         projects: projs,
         currentProject: proj
       };
+    },
+
+    removeProject(state, { payload }) {
+      const { projects, currentProject } = state;
+      let { projectInfo } = payload;
+
+      const { name } = projectInfo;
+      const projs = projects.filter(item => item.name !== name);
+      let proj = projectInfo;
+      if (currentProject.name === name) {
+        proj = null;
+      }
+      config.setItem('projects', projs);
+      return {
+        ...state,
+        projects: projs,
+        currentProject: proj
+      };
     }
   }
 });

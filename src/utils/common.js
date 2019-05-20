@@ -1,6 +1,11 @@
 import { remote } from 'electron';
-import { readFileSync, writeFileSync } from 'fs-extra';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync
+} from 'fs-extra';
 import { render } from 'ejs';
+import { join } from 'path';
 
 export function openDirectory() {
   try {
@@ -22,4 +27,18 @@ export const writeToFile = (source, target, data) => {
     content = tpl;
   }
   writeFileSync(target, content);
+};
+
+/**
+ * 检查工程是否有效，是否是dva-boot-*项目
+ */
+export const isNormalProject = directoryPath => {
+  if (directoryPath) {
+    const pkgPath = join(directoryPath, 'package.json');
+    if (existsSync(pkgPath)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 };

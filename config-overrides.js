@@ -5,6 +5,7 @@ const removeWebpackPlugins = require('react-app-rewire-unplug');
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 
 module.exports = function override(config, env) {
+  // 在renderer端，使用node模块
   config.target = 'electron-renderer';
 
   config.resolve = {
