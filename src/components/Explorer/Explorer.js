@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import { Layout, Icon, Menu, Modal, Input } from 'antd';
 import BaseComponent from 'components/BaseComponent';
+import $$ from 'cmn-utils';
 import './style/index.less';
 const { Header, Content } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -11,6 +12,14 @@ class Explorer extends BaseComponent {
     mocksVisible: false,
     mockName: null
   };
+
+  componentDidMount() {
+    $$.on('createMocks', this.createMocks);
+  }
+
+  componentWillUnmount() {
+    $$.off('createMocks');
+  }
 
   createMocks = e => {
     e.stopPropagation();

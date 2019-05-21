@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Layout, Row, Col, Card, Tag } from 'antd';
 import BaseComponent from 'components/BaseComponent';
+import $$ from 'cmn-utils';
 const { Content } = Layout;
 
 @connect(({ global }) => ({ global }))
@@ -22,7 +23,7 @@ export default class Home extends BaseComponent {
               <Card
                 className="transfer-card"
                 title={`路由页 (${routes.length})`}
-                extra={<a>新增</a>}
+                extra={<Link to="/createRoute">新增</Link>}
               >
                 <div className="router-card-body">
                   {routes.map((item, index) => (
@@ -38,7 +39,7 @@ export default class Home extends BaseComponent {
               <Card
                 className="transfer-card"
                 title={`模拟数据 (${mocks.length})`}
-                extra={<a>新增</a>}
+                extra={<a onClick={e => $$.trigger('createMocks', e)}>新增</a>}
               >
                 <div className="router-card-body">
                   {mocks.map((item, index) => (
